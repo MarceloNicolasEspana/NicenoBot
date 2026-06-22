@@ -17,13 +17,13 @@ const nicenitoAlt = {
     finalizando: 'Nicenito esta finalizando la conversacion',
 };
 const nicenitoLabels = {
-    base: 'Nicenito esta listo para acompanarte.',
-    escuchando: 'Nicenito te esta escuchando con atencion.',
-    pensando: 'Nicenito esta preparando una respuesta.',
-    respondiendo: 'Nicenito ya esta respondiendo.',
-    explicando: 'Nicenito esta explicando con mas detalle.',
+    base: 'Nicenito está listo para acompañarte.',
+    escuchando: 'Nicenito está escuchando.',
+    pensando: 'Nicenito está pensando.',
+    respondiendo: 'Nicenito está respondiendo.',
+    explicando: 'Nicenito está explicando.',
     celebrando: 'Nicenito te anima a seguir adelante.',
-    finalizando: 'Nicenito esta cerrando este momento contigo.',
+    finalizando: 'Nicenito está cerrando este momento contigo.',
 };
 
 const escapeHtml = (value) =>
@@ -51,14 +51,25 @@ const formatSources = (sources) => {
 
 const createMessageMarkup = ({ role, content, sources = [] }) => {
     const isUser = role === 'user';
-    const widthClass = isUser ? 'max-w-[84%] sm:max-w-[80%]' : 'max-w-[82%] sm:max-w-[78%]';
-    const alignment = isUser ? 'ml-auto rounded-br-md bg-slate-950 text-white' : 'mr-auto rounded-bl-md bg-white text-slate-700 ring-1 ring-slate-200';
     const animationClass = isUser ? '' : ' chat-assistant-message';
 
+    if (isUser) {
+        return `
+            <article class="chat-row chat-row-user">
+                <div class="chat-bubble chat-bubble-user">
+                    <p>${escapeHtml(content)}</p>
+                </div>
+            </article>
+        `;
+    }
+
     return `
-        <article class="${widthClass} rounded-3xl px-5 py-4 text-sm leading-7 shadow-sm ${alignment}${animationClass}">
-            <p>${escapeHtml(content)}</p>
-            ${isUser ? '' : formatSources(sources)}
+        <article class="chat-row chat-row-bot${animationClass}">
+            <img src="/images/nicenito/clean/base.png" alt="" class="chat-mini-avatar">
+            <div class="chat-bubble chat-bubble-bot">
+                <p>${escapeHtml(content)}</p>
+                ${formatSources(sources)}
+            </div>
         </article>
     `;
 };
@@ -125,6 +136,17 @@ const initializeCatequesisChat = () => {
         const nextState = nicenitoImages[state] ? state : 'base';
 
         nicenitoAvatar.dataset.state = nextState;
+        // Single state hook for the avatar image, status text, and CSS halo effects.
+        nicenitoAvatar.classList.remove(
+            'nicenito--base',
+            'nicenito--escuchando',
+            'nicenito--pensando',
+            'nicenito--respondiendo',
+            'nicenito--explicando',
+            'nicenito--celebrando',
+            'nicenito--finalizando',
+        );
+        nicenitoAvatar.classList.add(`nicenito--${nextState}`);
         nicenitoAvatar.classList.add('nicenito-avatar-changing');
         nicenitoAvatarImage.src = nicenitoImages[nextState];
         nicenitoAvatarImage.alt = nicenitoAlt[nextState] ?? nicenitoAlt.base;
@@ -180,8 +202,11 @@ const initializeCatequesisChat = () => {
 
         if (history.length === 0) {
             messagesContainer.innerHTML = `
-                <article class="max-w-[82%] rounded-3xl rounded-bl-md bg-white px-5 py-4 text-sm leading-7 text-slate-700 shadow-sm ring-1 ring-slate-200 sm:max-w-[78%]">
-                    <p>Hola, soy Nicenito. Puedes preguntarme sobre la fe, la oraci\u00f3n, Jes\u00fas, el Evangelio o los sacramentos.</p>
+                <article class="chat-row chat-row-bot">
+                    <img src="/images/nicenito/clean/base.png" alt="" class="chat-mini-avatar">
+                    <div class="chat-bubble chat-bubble-bot">
+                        <p>Hola, soy Nicenito. Puedes preguntarme sobre la fe, la oraci\u00f3n, Jes\u00fas, el Evangelio o los sacramentos.</p>
+                    </div>
                 </article>
             `;
             scrollToBottom();

@@ -10,44 +10,330 @@
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
+@layer base {
+    :root {
+        --niceno-ink: #111827;
+        --niceno-muted: #475569;
+        --niceno-cream: #fff7e8;
+        --niceno-surface: rgba(255, 251, 242, 0.86);
+        --niceno-surface-strong: rgba(255, 255, 255, 0.9);
+        --niceno-border: #d9cbb6;
+        --niceno-gold: #d89a20;
+        --niceno-gold-soft: rgba(216, 154, 32, 0.28);
+        --niceno-burgundy: #6f1d25;
+        --niceno-burgundy-dark: #4f151b;
+        --niceno-shadow: 0 24px 80px rgba(17, 24, 39, 0.22);
+    }
+
+    .font-display {
+        font-family: 'Lora', Georgia, serif;
+    }
+}
+
 @layer components {
-    .nicenito-avatar-image {
-        opacity: 1;
-        transform: translateY(0) scale(1);
+    .page-background-image {
+        position: fixed;
+        inset: -28px;
+        z-index: 0;
+        background-position: center;
+        background-size: cover;
+        filter: blur(4px);
+        opacity: 0.82;
+        transform: scale(1.04);
+    }
+
+    .page-background-veil {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        background:
+            linear-gradient(180deg, rgba(40, 22, 16, 0.44), rgba(77, 43, 24, 0.32)),
+            radial-gradient(circle at 50% 0%, rgba(255, 247, 232, 0.36), transparent 42%);
+    }
+
+    .niceno-shell {
+        min-height: min(44rem, calc(100vh - 2.5rem));
+        border: 1px solid rgba(255, 255, 255, 0.42);
+        border-radius: 2rem;
+        background: rgba(255, 251, 242, 0.72);
+        box-shadow: var(--niceno-shadow);
+        backdrop-filter: blur(18px);
+    }
+
+    .niceno-stage {
+        position: relative;
+        overflow: hidden;
+        background:
+            radial-gradient(circle at 50% 12%, rgba(216, 154, 32, 0.22), transparent 36%),
+            linear-gradient(180deg, rgba(255, 247, 232, 0.88), rgba(245, 238, 224, 0.78));
+    }
+
+    .niceno-stage::after {
+        position: absolute;
+        inset: auto 12% -8rem;
+        height: 16rem;
+        content: '';
+        border-radius: 9999px;
+        background: radial-gradient(circle, rgba(111, 29, 37, 0.13), transparent 66%);
+    }
+
+    .niceno-chat-panel {
+        min-height: 0;
+        background: rgba(255, 255, 255, 0.82);
+        backdrop-filter: blur(14px);
+        border-left: 1px solid rgba(217, 203, 182, 0.64);
+    }
+
+    .nicenito-presence {
+        --halo-color: rgba(216, 154, 32, 0.56);
+        --halo-glow: rgba(216, 154, 32, 0.22);
+        position: relative;
+        z-index: 1;
+    }
+
+    .nicenito-arch {
+        position: relative;
+        display: flex;
+        height: 28rem;
+        max-width: 24rem;
+        align-items: flex-end;
+        justify-content: center;
+        overflow: hidden;
+        border: 1px solid rgba(216, 154, 32, 0.3);
+        border-radius: 13rem 13rem 2rem 2rem;
+        background:
+            radial-gradient(circle at 50% 18%, rgba(255, 255, 255, 0.78), transparent 31%),
+            linear-gradient(180deg, rgba(255, 249, 235, 0.8), rgba(255, 255, 255, 0.22));
+        box-shadow:
+            inset 0 0 0 1px rgba(255, 255, 255, 0.46),
+            0 18px 38px rgba(120, 89, 33, 0.14);
+    }
+
+    .nicenito-halo {
+        position: absolute;
+        top: 2.8rem;
+        width: 12.5rem;
+        height: 12.5rem;
+        border: 2px solid var(--halo-color);
+        border-radius: 9999px;
+        box-shadow:
+            0 0 0 0 var(--halo-glow),
+            0 0 46px var(--halo-glow),
+            inset 0 0 28px rgba(255, 255, 255, 0.3);
+    }
+
+    .nicenito-stage-image {
+        position: relative;
+        z-index: 2;
+        width: min(118%, 28rem);
+        height: 96%;
+        object-fit: contain;
+        object-position: bottom center;
+        filter: drop-shadow(0 18px 28px rgba(17, 24, 39, 0.18));
         transition: opacity 220ms ease, transform 220ms ease;
     }
 
-    .nicenito-avatar-changing .nicenito-avatar-image {
-        opacity: 0.92;
-        transform: translateY(3px) scale(0.988);
+    .nicenito-avatar-changing .nicenito-stage-image {
+        opacity: 0.94;
+        transform: translateY(3px) scale(0.992);
     }
 
-    .nicenito-hero-stage {
-        isolation: isolate;
+    .nicenito-status {
+        display: flex;
+        width: min(100%, 24rem);
+        align-items: center;
+        justify-content: center;
+        gap: 0.65rem;
+        margin: 1rem auto 0;
+        padding: 0.9rem 1rem;
+        border: 1px solid rgba(216, 154, 32, 0.18);
+        border-radius: 9999px;
+        background: rgba(255, 255, 255, 0.68);
+        color: var(--niceno-ink);
+        font-size: 0.95rem;
+        font-weight: 700;
+        box-shadow: 0 14px 28px rgba(120, 89, 33, 0.1);
     }
 
-    .nicenito-chat-stage {
-        isolation: isolate;
+    .nicenito-status-dots {
+        display: inline-flex;
+        gap: 0.22rem;
     }
 
-    .nicenito-hero-image {
-        transform-origin: bottom center;
-        filter: drop-shadow(0 14px 24px rgba(120, 89, 33, 0.10));
-        transform: translateY(0) scale(1.22);
+    .nicenito-status-dots span {
+        width: 0.32rem;
+        height: 0.32rem;
+        border-radius: 9999px;
+        background: var(--halo-color);
+        opacity: 0.5;
+        animation: nicenito-dots 1.15s ease-in-out infinite;
     }
 
-    .nicenito-chat-image {
-        transform-origin: bottom center;
-        filter: drop-shadow(0 14px 24px rgba(120, 89, 33, 0.10));
-        transform: translateY(0) scale(1.18);
+    .nicenito-status-dots span:nth-child(2) {
+        animation-delay: 140ms;
     }
 
-    .nicenito-mobile-overlap {
-        margin-left: -0.4rem;
+    .nicenito-status-dots span:nth-child(3) {
+        animation-delay: 280ms;
+    }
+
+    .nicenito--base .nicenito-halo,
+    .nicenito--respondiendo .nicenito-halo,
+    .nicenito--celebrando .nicenito-halo,
+    .nicenito--finalizando .nicenito-halo {
+        animation: none;
+    }
+
+    .nicenito--escuchando {
+        --halo-color: rgba(245, 158, 11, 0.74);
+        --halo-glow: rgba(245, 158, 11, 0.24);
+    }
+
+    .nicenito--escuchando .nicenito-halo {
+        animation: nicenito-halo-pulse 2s ease-in-out infinite;
+    }
+
+    .nicenito--explicando {
+        --halo-color: rgba(216, 154, 32, 0.9);
+        --halo-glow: rgba(216, 154, 32, 0.34);
+    }
+
+    .nicenito--explicando .nicenito-halo {
+        animation: nicenito-halo-glow 2.4s ease-in-out infinite;
+    }
+
+    .nicenito--pensando {
+        --halo-color: rgba(111, 29, 37, 0.62);
+        --halo-glow: rgba(111, 29, 37, 0.22);
+    }
+
+    .nicenito--pensando .nicenito-halo {
+        animation: nicenito-halo-flicker 1.8s steps(2, end) infinite;
+    }
+
+    .niceno-chip {
+        border: 1px solid var(--niceno-gold-soft);
+        border-radius: 9999px;
+        background: rgba(255, 247, 232, 0.76);
+        padding: 0.72rem 1rem;
+        color: #3d2314;
+        font-size: 0.9rem;
+        font-weight: 700;
+        transition: transform 150ms ease, border-color 150ms ease, background-color 150ms ease, box-shadow 150ms ease;
+    }
+
+    .niceno-chip:hover,
+    .niceno-chip:focus-visible {
+        transform: translateY(-1px);
+        border-color: rgba(216, 154, 32, 0.62);
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 10px 20px rgba(120, 89, 33, 0.12);
+        outline: none;
+    }
+
+    .chat-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.7rem;
+    }
+
+    .chat-row-bot {
+        justify-content: flex-start;
+    }
+
+    .chat-row-user {
+        justify-content: flex-end;
+    }
+
+    .chat-mini-avatar {
+        width: 2.35rem;
+        height: 2.35rem;
+        flex-shrink: 0;
+        border-radius: 9999px;
+        background: var(--niceno-cream);
+        object-fit: cover;
+        object-position: top center;
+        padding: 0.15rem;
+        box-shadow: 0 6px 12px rgba(120, 89, 33, 0.12);
+    }
+
+    .chat-bubble {
+        max-width: min(78%, 42rem);
+        padding: 1rem 1.15rem;
+        border-radius: 1.35rem;
+        font-size: 0.95rem;
+        line-height: 1.7;
+        box-shadow: 0 10px 24px rgba(17, 24, 39, 0.08);
+    }
+
+    .chat-bubble-bot {
+        border-top-left-radius: 0.45rem;
+        border: 1px solid rgba(217, 203, 182, 0.75);
+        background: rgba(255, 247, 232, 0.88);
+        color: #233044;
+    }
+
+    .chat-bubble-user {
+        border-bottom-right-radius: 0.45rem;
+        background: var(--niceno-burgundy);
+        color: #fff;
     }
 
     .chat-assistant-message {
         animation: nicenito-message-fade 320ms ease-out;
+    }
+}
+
+@keyframes nicenito-halo-pulse {
+    0%,
+    100% {
+        box-shadow: 0 0 0 0 var(--halo-glow), 0 0 42px var(--halo-glow);
+    }
+
+    50% {
+        box-shadow: 0 0 0 13px rgba(245, 158, 11, 0), 0 0 58px var(--halo-glow);
+    }
+}
+
+@keyframes nicenito-halo-glow {
+    0%,
+    100% {
+        filter: brightness(1);
+        box-shadow: 0 0 0 4px rgba(216, 154, 32, 0.08), 0 0 44px var(--halo-glow);
+    }
+
+    50% {
+        filter: brightness(1.08);
+        box-shadow: 0 0 0 9px rgba(216, 154, 32, 0.12), 0 0 72px var(--halo-glow);
+    }
+}
+
+@keyframes nicenito-halo-flicker {
+    0%,
+    100% {
+        opacity: 0.72;
+    }
+
+    35% {
+        opacity: 0.96;
+    }
+
+    70% {
+        opacity: 0.62;
+    }
+}
+
+@keyframes nicenito-dots {
+    0%,
+    100% {
+        transform: translateY(0);
+        opacity: 0.45;
+    }
+
+    50% {
+        transform: translateY(-3px);
+        opacity: 1;
     }
 }
 
@@ -63,69 +349,71 @@
     }
 }
 
+@media (max-width: 1023px) {
+    .niceno-shell {
+        grid-template-columns: 1fr;
+    }
+
+    .niceno-chat-panel {
+        border-left: 0;
+        border-top: 1px solid rgba(217, 203, 182, 0.64);
+    }
+
+    .niceno-stage {
+        min-height: auto;
+    }
+
+    .nicenito-arch {
+        height: 21rem;
+        max-width: 19rem;
+    }
+
+    .nicenito-halo {
+        top: 2.1rem;
+        width: 9rem;
+        height: 9rem;
+    }
+}
+
+@media (max-width: 639px) {
+    .niceno-shell {
+        min-height: auto;
+        border-radius: 1.45rem;
+    }
+
+    .niceno-stage {
+        padding: 1.25rem;
+    }
+
+    .nicenito-arch {
+        height: 16.5rem;
+        max-width: 15rem;
+        border-radius: 9rem 9rem 1.35rem 1.35rem;
+    }
+
+    .nicenito-halo {
+        top: 1.55rem;
+        width: 7.4rem;
+        height: 7.4rem;
+    }
+
+    .nicenito-status {
+        border-radius: 1rem;
+        text-align: center;
+    }
+
+    .chat-bubble {
+        max-width: 88%;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
+    .nicenito-halo,
+    .nicenito-status-dots span,
     .nicenito-avatar-image,
     .chat-assistant-message {
         animation: none !important;
         transition: none !important;
         transform: none !important;
-    }
-}
-
-@media (max-width: 1023px) {
-    .nicenito-hero-image {
-        transform: translateY(0) scale(1.12);
-    }
-
-    .nicenito-chat-image {
-        transform: translateY(0) scale(1.08);
-    }
-}
-
-@media (max-width: 639px) {
-    #catequesis-chat > div {
-        overflow: visible;
-    }
-
-    .nicenito-hero-image {
-        transform: translateY(0) scale(1.06);
-    }
-
-    .nicenito-chat-figure {
-        max-width: none;
-        position: absolute;
-        top: 0.8rem;
-        right: 0;
-        z-index: 30;
-        pointer-events: none;
-    }
-
-    .nicenito-chat-stage {
-        width: 5.75rem;
-        height: 5.75rem;
-        margin-right: -1.15rem;
-        margin-bottom: -0.25rem;
-        overflow: hidden;
-        border: 1px solid rgba(245, 158, 11, 0.26);
-        border-radius: 9999px;
-        background: linear-gradient(180deg, rgba(255, 248, 235, 0.98), rgba(245, 238, 224, 0.96));
-        box-shadow: 0 16px 34px rgba(15, 23, 42, 0.16), 0 0 0 8px rgba(255, 255, 255, 0.78);
-    }
-
-    .nicenito-chat-image {
-        position: absolute;
-        top: -0.35rem;
-        left: 50%;
-        width: 245%;
-        height: auto;
-        max-width: none;
-        object-fit: contain;
-        transform: translateX(-50%);
-        transform-origin: top center;
-    }
-
-    .nicenito-mobile-overlap {
-        margin-right: -1.15rem;
-        margin-left: auto;
     }
 }
