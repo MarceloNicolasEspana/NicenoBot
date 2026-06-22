@@ -53,7 +53,8 @@
     }
 
     .niceno-shell {
-        min-height: min(44rem, calc(100vh - 2.5rem));
+        height: min(52rem, calc(100vh - 2.5rem));
+        min-height: 42rem;
         border: 1px solid rgba(255, 255, 255, 0.42);
         border-radius: 2rem;
         background: rgba(255, 251, 242, 0.72);
@@ -79,7 +80,10 @@
     }
 
     .niceno-chat-panel {
+        height: 100%;
+        max-height: 100%;
         min-height: 0;
+        overflow: hidden;
         background: rgba(255, 255, 255, 0.82);
         backdrop-filter: blur(14px);
         border-left: 1px solid rgba(217, 203, 182, 0.64);
@@ -351,10 +355,14 @@
 
 @media (max-width: 1023px) {
     .niceno-shell {
+        height: auto;
         grid-template-columns: 1fr;
+        min-height: auto;
     }
 
     .niceno-chat-panel {
+        height: min(42rem, calc(100vh - 2rem));
+        max-height: min(42rem, calc(100vh - 2rem));
         border-left: 0;
         border-top: 1px solid rgba(217, 203, 182, 0.64);
     }
@@ -379,6 +387,11 @@
     .niceno-shell {
         min-height: auto;
         border-radius: 1.45rem;
+    }
+
+    .niceno-chat-panel {
+        height: min(40rem, calc(100vh - 1.25rem));
+        max-height: min(40rem, calc(100vh - 1.25rem));
     }
 
     .niceno-stage {

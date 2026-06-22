@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class CatequesisChatTest extends TestCase
@@ -39,5 +40,33 @@ class CatequesisChatTest extends TestCase
         $response
             ->assertUnprocessable()
             ->assertJsonValidationErrors(['message']);
+    }
+
+    #[DataProvider('keywordProvider')]
+    public function test_chat_endpoint_matches_defined_keywords(string $message, string $expectedFragment): void
+    {
+        $response = $this->postJson('/api/catequesis/chat', [
+            'message' => $message,
+        ]);
+
+        $response
+            ->assertOk()
+            ->assertJsonPath('answer', fn (string $answer) => str_contains($answer, $expectedFragment));
+    }
+
+    public static function keywordProvider(): array
+    {
+        return [
+            ['Gracias por ayudarme', 'agradecido'],
+            ['¿Quién eres?', 'Concilio de Nicea'],
+            ['Hola Nicenito', 'Me alegra que hayas venido'],
+            ['¿Cómo puedo rezar mejor?', 'Rezar mejor'],
+            ['¿Qué es la confesión?', 'La confesion'],
+            ['¿Qué significa tener fe?', 'Tener fe'],
+            ['Explícame el Evangelio del domingo', 'El Evangelio'],
+            ['Tengo culpa por un pecado', 'El pecado'],
+            ['Que son los sacramentos', 'Los sacramentos'],
+            ['Quiero conocer a Jesús', 'Jesus es el Hijo de Dios'],
+        ];
     }
 }

@@ -71,7 +71,7 @@
                         </div>
                     </aside>
 
-                    <section class="niceno-chat-panel flex min-h-[38rem] flex-col lg:min-h-[44rem]">
+                    <section class="niceno-chat-panel flex min-h-0 flex-col">
                         <header class="border-b border-[color:var(--niceno-border)]/80 px-5 py-4 sm:px-7">
                             <div class="flex items-center gap-3">
                                 <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[color:var(--niceno-cream)] ring-1 ring-[color:var(--niceno-gold-soft)]">

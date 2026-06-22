@@ -11,7 +11,7 @@ class CatequesisChatService
      */
     public function respond(string $message): array
     {
-        $normalizedMessage = Str::of($message)->lower()->ascii()->value();
+        $normalizedMessage = $this->normalize($message);
 
         $topics = [
             [
@@ -19,6 +19,27 @@ class CatequesisChatService
                 'answer' => 'Sentir miedo no te aleja de Dios. Muchas veces el miedo aparece cuando no sabemos que viene, pero Jesus repite que no tengamos miedo porque el Padre nos cuida. Puedes hablarle con sinceridad, pedir ayuda y no cargar solo con lo que te preocupa. Si el miedo es muy fuerte o constante, tambien conviene buscar acompanamiento de un adulto de confianza o un profesional. Pregunta para reflexionar: Que miedo te gustaria poner hoy en manos de Dios?',
                 'sources' => [
                     ['type' => 'Biblia', 'reference' => 'Mateo 10, 26-33'],
+                ],
+            ],
+            [
+                'keywords' => ['gracias', 'agradecido', 'agradecida', 'bendecido', 'bendecida', 'gratitud'],
+                'answer' => 'Me alegra que te sientas agradecido. La gratitud es una forma hermosa de reconocer las bendiciones en nuestra vida y fortalecer nuestra relacion con Dios. Puedes expresarla en la oracion, compartiendo tu alegria con otros o tomando un momento para reconocer lo bueno que has recibido. Pregunta para reflexionar: Por que cosas estas agradecido hoy?',
+                'sources' => [
+                    ['type' => 'Biblia', 'reference' => '1 Tesalonicenses 5, 16-18'],
+                ],
+            ],
+            [
+                'keywords' => ['hola', 'saludos', 'buenos dias', 'buenas tardes', 'buenas noches'],
+                'answer' => 'Hola. Me alegra que hayas venido. En que puedo ayudarte hoy?',
+                'sources' => [
+                    ['type' => 'Biblia', 'reference' => 'Lucas 24, 15'],
+                ],
+            ],
+            [
+                'keywords' => ['quien eres', 'que eres', 'quien es nicenito', 'que es nicenito', 'nicenito'],
+                'answer' => 'Soy un asistente para catequesis de la fe cristiana catolica. Mi nombre recuerda el Concilio de Nicea: Nicea, Niceno, Nicenito. Estoy aqui para ayudarte a entender mejor la fe, responder preguntas sencillas y acompanarte en tu camino de crecimiento espiritual. No reemplazo a tu catequista, sacerdote o adulto responsable, pero puedo ayudarte a preparar mejor tus preguntas.',
+                'sources' => [
+                    ['type' => 'Biblia', 'reference' => '1 Pedro 3, 15'],
                 ],
             ],
             [
@@ -74,7 +95,7 @@ class CatequesisChatService
 
         foreach ($topics as $topic) {
             foreach ($topic['keywords'] as $keyword) {
-                if (str_contains($normalizedMessage, $keyword)) {
+                if (str_contains($normalizedMessage, $this->normalize($keyword))) {
                     return [
                         'answer' => $topic['answer'],
                         'sources' => $topic['sources'],
@@ -87,5 +108,15 @@ class CatequesisChatService
             'answer' => 'Todavia estoy aprendiendo sobre este tema. Puedes reformular tu pregunta o conversarla con tu catequista, sacerdote o un adulto de confianza.',
             'sources' => [],
         ];
+    }
+
+    private function normalize(string $value): string
+    {
+        return Str::of($value)
+            ->lower()
+            ->ascii()
+            ->replaceMatches('/[^\pL\pN\s]+/u', ' ')
+            ->squish()
+            ->value();
     }
 }
