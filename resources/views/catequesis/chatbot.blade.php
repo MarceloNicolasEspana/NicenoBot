@@ -63,7 +63,7 @@
                         data-endpoint="{{ url('/api/catequesis/chat') }}"
                         class="relative rounded-[2rem] border border-slate-200/80 bg-white/92 p-3 shadow-[0_18px_54px_rgba(15,23,42,0.12)] backdrop-blur sm:p-4"
                     >
-                        <div class="relative flex min-h-[36rem] flex-1 flex-col overflow-hidden rounded-[1.6rem] bg-slate-50 ring-1 ring-slate-200 lg:min-h-[42rem]">
+                        <div class="relative flex h-[42rem] max-h-[calc(100vh-2rem)] min-h-[34rem] flex-1 flex-col overflow-hidden rounded-[1.6rem] bg-slate-50 ring-1 ring-slate-200 sm:max-h-[calc(100vh-3rem)] lg:h-[44rem]">
                             <div class="border-b border-slate-200 bg-white/95 px-5 py-4 sm:px-6">
                                 <div class="flex items-center gap-3">
                                     <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[linear-gradient(180deg,#fff7e6,#f5efe0)] ring-1 ring-amber-100">
@@ -80,14 +80,14 @@
                                 </div>
                             </div>
 
-                            <div class="flex flex-1 flex-col lg:flex-row">
+                            <div class="flex min-h-0 flex-1 flex-col lg:flex-row">
                                 <aside class="relative z-10 border-l-4 border-amber-200/85 px-1 pt-2 lg:flex lg:w-[19rem] lg:shrink-0 lg:items-end lg:justify-start lg:border-l-0 lg:pl-2 lg:pt-6">
-                                    <div class="nicenito-chat-figure relative mx-auto w-full max-w-[16rem] sm:max-w-[18rem] lg:mx-0 lg:max-w-none">
+                                    <div class="nicenito-chat-figure relative w-full max-w-[16rem] sm:mx-auto sm:max-w-[18rem] lg:mx-0 lg:max-w-none">
                                         <div class="absolute inset-x-4 bottom-4 h-24 rounded-full bg-[radial-gradient(circle,rgba(217,119,6,0.22),transparent_72%)] blur-2xl"></div>
                                         <div
                                             id="nicenito-avatar"
                                             data-state="base"
-                                            class="nicenito-chat-stage nicenito-mobile-overlap relative mx-auto flex h-[220px] items-end justify-center sm:h-[250px] lg:h-[360px]"
+                                            class="nicenito-chat-stage nicenito-mobile-overlap relative flex h-[220px] items-end justify-center sm:mx-auto sm:h-[250px] lg:h-[360px]"
                                         >
                                             <img
                                                 id="nicenito-avatar-image"
@@ -99,8 +99,8 @@
                                     </div>
                                 </aside>
 
-                                <div class="flex min-w-0 flex-1 flex-col">
-                                    <div id="chat-messages" class="flex-1 space-y-4 overflow-y-auto px-4 py-5 sm:px-6 lg:min-h-[25rem]">
+                                <div class="flex min-h-0 min-w-0 flex-1 flex-col">
+                                    <div id="chat-messages" class="min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-contain px-4 py-5 sm:px-6">
                                         <article class="max-w-[82%] rounded-3xl rounded-bl-md bg-white px-5 py-4 text-sm leading-7 text-slate-700 shadow-sm ring-1 ring-slate-200 sm:max-w-[78%]">
                                             <p>
                                                 Hola, soy Nicenito. Puedes preguntarme sobre la fe, la oraci&oacute;n, Jes&uacute;s, el Evangelio o los sacramentos.

@@ -1,4 +1,3 @@
-const storageKey = 'nicenobot-catequesis-chat';
 const nicenitoImages = {
     base: '/images/nicenito/clean/base.png',
     escuchando: '/images/nicenito/clean/escuchando.png',
@@ -64,25 +63,6 @@ const createMessageMarkup = ({ role, content, sources = [] }) => {
     `;
 };
 
-const parseStoredMessages = () => {
-    try {
-        const raw = window.localStorage.getItem(storageKey);
-        if (!raw) {
-            return [];
-        }
-
-        const parsed = JSON.parse(raw);
-
-        return Array.isArray(parsed) ? parsed : [];
-    } catch {
-        return [];
-    }
-};
-
-const persistMessages = (messages) => {
-    window.localStorage.setItem(storageKey, JSON.stringify(messages));
-};
-
 const initializeCatequesisChat = () => {
     const root = document.querySelector('#catequesis-chat');
 
@@ -120,7 +100,7 @@ const initializeCatequesisChat = () => {
         return;
     }
 
-    let history = parseStoredMessages();
+    let history = [];
     let isSending = false;
     let idleTimer;
     let avatarTransitionTimer;
@@ -226,7 +206,6 @@ const initializeCatequesisChat = () => {
 
     const appendMessage = (message) => {
         history.push(message);
-        persistMessages(history);
         messagesContainer.insertAdjacentHTML('beforeend', createMessageMarkup(message));
         scrollToBottom();
     };
@@ -251,7 +230,7 @@ const initializeCatequesisChat = () => {
         appendMessage({ role: 'user', content: trimmedMessage });
         textarea.value = '';
         syncCounter();
-        setNicenitoState('pensando');
+        setNicenitoState('explicando');
         setLoading(true);
 
         try {
@@ -274,7 +253,6 @@ const initializeCatequesisChat = () => {
             }, prefersReducedMotion.matches ? 0 : 900);
         } catch (error) {
             history.pop();
-            persistMessages(history);
             renderHistory();
 
             const validationMessage = error?.response?.data?.errors?.message?.[0];
@@ -282,7 +260,6 @@ const initializeCatequesisChat = () => {
             setNicenitoState('base');
         } finally {
             setLoading(false);
-            textarea.focus();
         }
     };
 

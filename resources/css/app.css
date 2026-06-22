@@ -83,19 +83,49 @@
 }
 
 @media (max-width: 639px) {
+    #catequesis-chat > div {
+        overflow: visible;
+    }
+
     .nicenito-hero-image {
         transform: translateY(0) scale(1.06);
     }
 
+    .nicenito-chat-figure {
+        max-width: none;
+        position: absolute;
+        top: 0.8rem;
+        right: 0;
+        z-index: 30;
+        pointer-events: none;
+    }
+
     .nicenito-chat-stage {
-        width: min(100%, 15rem);
+        width: 5.75rem;
+        height: 5.75rem;
+        margin-right: -1.15rem;
+        margin-bottom: -0.25rem;
+        overflow: hidden;
+        border: 1px solid rgba(245, 158, 11, 0.26);
+        border-radius: 9999px;
+        background: linear-gradient(180deg, rgba(255, 248, 235, 0.98), rgba(245, 238, 224, 0.96));
+        box-shadow: 0 16px 34px rgba(15, 23, 42, 0.16), 0 0 0 8px rgba(255, 255, 255, 0.78);
     }
 
     .nicenito-chat-image {
-        transform: translateY(0) scale(1.04);
+        position: absolute;
+        top: -0.35rem;
+        left: 50%;
+        width: 245%;
+        height: auto;
+        max-width: none;
+        object-fit: contain;
+        transform: translateX(-50%);
+        transform-origin: top center;
     }
 
     .nicenito-mobile-overlap {
-        margin-left: -0.9rem;
+        margin-right: -1.15rem;
+        margin-left: auto;
     }
 }
