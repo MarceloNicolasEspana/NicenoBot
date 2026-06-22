@@ -9,3 +9,93 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+@layer components {
+    .nicenito-avatar-image {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        transition: opacity 220ms ease, transform 220ms ease;
+    }
+
+    .nicenito-avatar-changing .nicenito-avatar-image {
+        opacity: 0.92;
+        transform: translateY(3px) scale(0.988);
+    }
+
+    .nicenito-hero-stage {
+        isolation: isolate;
+    }
+
+    .nicenito-chat-stage {
+        isolation: isolate;
+    }
+
+    .nicenito-hero-image {
+        transform-origin: bottom center;
+        filter: drop-shadow(0 14px 24px rgba(120, 89, 33, 0.10));
+        transform: translateY(0) scale(1.22);
+    }
+
+    .nicenito-chat-image {
+        transform-origin: bottom center;
+        filter: drop-shadow(0 14px 24px rgba(120, 89, 33, 0.10));
+        transform: translateY(0) scale(1.18);
+    }
+
+    .nicenito-mobile-overlap {
+        margin-left: -0.4rem;
+    }
+
+    .chat-assistant-message {
+        animation: nicenito-message-fade 320ms ease-out;
+    }
+}
+
+@keyframes nicenito-message-fade {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .nicenito-avatar-image,
+    .chat-assistant-message {
+        animation: none !important;
+        transition: none !important;
+        transform: none !important;
+    }
+}
+
+@media (max-width: 1023px) {
+    .nicenito-hero-image {
+        transform: translateY(0) scale(1.12);
+    }
+
+    .nicenito-chat-image {
+        transform: translateY(0) scale(1.08);
+    }
+}
+
+@media (max-width: 639px) {
+    .nicenito-hero-image {
+        transform: translateY(0) scale(1.06);
+    }
+
+    .nicenito-chat-stage {
+        width: min(100%, 15rem);
+    }
+
+    .nicenito-chat-image {
+        transform: translateY(0) scale(1.04);
+    }
+
+    .nicenito-mobile-overlap {
+        margin-left: -0.9rem;
+    }
+}
