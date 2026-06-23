@@ -2,10 +2,16 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class CatequesisChatService
 {
+    public function __construct(
+        private readonly GeminiModelService $gemini,
+    ) {
+    }
+
     /**
      * @return array{answer:string,sources:array<int,array{type:string,reference:string}>}
      */
@@ -96,16 +102,20 @@ class CatequesisChatService
         foreach ($topics as $topic) {
             foreach ($topic['keywords'] as $keyword) {
                 if (str_contains($normalizedMessage, $this->normalize($keyword))) {
+                    Log::info('niceno.keyword_match', ['keyword' => $keyword]);
+
                     return [
-                        'answer' => $topic['answer'],
+                        'answer'  => $topic['answer'],
                         'sources' => $topic['sources'],
                     ];
                 }
             }
         }
 
+        Log::info('niceno.gemini_fallback', ['message' => $message]);
+
         return [
-            'answer' => 'Todavia estoy aprendiendo sobre este tema. Puedes reformular tu pregunta o conversarla con tu catequista, sacerdote o un adulto de confianza.',
+            'answer'  => $this->gemini->ask($message),
             'sources' => [],
         ];
     }

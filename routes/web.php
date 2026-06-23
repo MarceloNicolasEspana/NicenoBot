@@ -8,3 +8,4 @@ Route::get('/', function () {
 });
 
 Route::get('/chatbot-catequesis', [CatequesisChatController::class, 'show']);
+Route::post('/chatbot-catequesis/chat', [CatequesisChatController::class, 'chat']);

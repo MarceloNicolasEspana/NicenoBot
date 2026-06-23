@@ -127,6 +127,13 @@ return [
             'path' => storage_path('logs/laravel.log'),
         ],
 
+        'gemini' => [
+            'driver' => 'daily',
+            'path'   => storage_path('logs/gemini.log'),
+            'level'  => 'debug',
+            'days'   => 7,
+        ],
+
     ],
 
 ];
