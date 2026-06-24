@@ -2,71 +2,121 @@
 
 namespace Tests\Feature;
 
-use PHPUnit\Framework\Attributes\DataProvider;
+use App\Models\NicenitoContent;
+use App\Models\NicenitoQuestion;
+use App\Models\Participant;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class CatequesisChatTest extends TestCase
 {
-    public function test_chatbot_page_is_accessible(): void
-    {
-        $response = $this->get('/chatbot-catequesis');
+    use RefreshDatabase;
 
-        $response->assertOk();
-        $response->assertSee('Preg&uacute;ntale a Nicenito', false);
+    private function participant(): Participant
+    {
+        return Participant::factory()->create();
     }
 
-    public function test_chat_endpoint_returns_answer_and_sources(): void
+    private function fakeGemini(string $text = 'Respuesta de prueba de Nicenito.'): void
     {
-        $response = $this->postJson('/api/catequesis/chat', [
-            'message' => 'Tengo miedo y quiero rezar',
+        Http::fake([
+            'generativelanguage.googleapis.com/*' => Http::response([
+                'candidates' => [[
+                    'content' => ['parts' => [['text' => $text]]],
+                    'finishReason' => 'STOP',
+                ]],
+                'usageMetadata' => ['promptTokenCount' => 100, 'candidatesTokenCount' => 50, 'totalTokenCount' => 150],
+            ]),
         ]);
+    }
 
-        $response
+    public function test_chatbot_page_requires_participant_session(): void
+    {
+        $this->get('/chatbot-catequesis')->assertRedirect(route('participant.access.show'));
+    }
+
+    public function test_chatbot_page_is_accessible_with_participant_session(): void
+    {
+        $this->withSession(['participant_id' => $this->participant()->id])
+            ->get('/chatbot-catequesis')
             ->assertOk()
-            ->assertJsonStructure([
-                'answer',
-                'sources' => [
-                    '*' => ['type', 'reference'],
-                ],
-            ]);
+            ->assertSee('Preg&uacute;ntale a Nicenito', false);
     }
 
     public function test_chat_endpoint_validates_message_length(): void
     {
-        $response = $this->postJson('/api/catequesis/chat', [
-            'message' => str_repeat('a', 501),
-        ]);
-
-        $response
+        $this->withSession(['participant_id' => $this->participant()->id])
+            ->postJson(route('chatbot.chat'), ['message' => str_repeat('a', 501)])
             ->assertUnprocessable()
             ->assertJsonValidationErrors(['message']);
     }
 
-    #[DataProvider('keywordProvider')]
-    public function test_chat_endpoint_matches_defined_keywords(string $message, string $expectedFragment): void
+    public function test_greeting_does_not_call_gemini(): void
     {
-        $response = $this->postJson('/api/catequesis/chat', [
-            'message' => $message,
-        ]);
+        Http::fake();
 
-        $response
+        $this->withSession(['participant_id' => $this->participant()->id])
+            ->postJson(route('chatbot.chat'), ['message' => 'Hola Nicenito'])
             ->assertOk()
-            ->assertJsonPath('answer', fn (string $answer) => str_contains($answer, $expectedFragment));
+            ->assertJsonPath('nicenito_state', 'respondiendo')
+            ->assertJsonMissingPath('meta');
+
+        Http::assertNothingSent();
     }
 
-    public static function keywordProvider(): array
+    public function test_authenticated_chat_stores_question_for_session_participant(): void
     {
-        return [
-            ['Gracias por ayudarme', 'agradecido'],
-            ['¿Quién eres?', 'Concilio de Nicea'],
-            ['Hola Nicenito', 'Me alegra que hayas venido'],
-            ['¿Cómo puedo rezar mejor?', 'Rezar mejor'],
-            ['¿Qué es la confesión?', 'La confesion'],
-            ['¿Qué significa tener fe?', 'Tener fe'],
-            ['Explícame el Evangelio del domingo', 'El Evangelio'],
-            ['Tengo culpa por un pecado', 'El pecado'],
-            ['Que son los sacramentos', 'Los sacramentos'],
-            ['Quiero conocer a Jesús', 'Jesus es el Hijo de Dios'],
-        ];
+        $this->fakeGemini();
+
+        $participant = $this->participant();
+        NicenitoContent::factory()->weekly()->create([
+            'gospel_reference' => 'Mateo 10, 26-33',
+            'biblical_references' => ['Mateo 10, 26-33'],
+            'tags' => ['miedo'],
+        ]);
+
+        $this->withSession(['participant_id' => $participant->id])
+            ->postJson(route('chatbot.chat'), ['message' => 'Tengo miedo, ¿qué hago?'])
+            ->assertOk()
+            ->assertJsonPath('sources.0.type', 'Evangelio');
+
+        $this->assertDatabaseHas('nicenito_questions', [
+            'participant_id' => $participant->id,
+            'used_gemini' => true,
+        ]);
+    }
+
+    public function test_frontend_cannot_assign_participant_id(): void
+    {
+        $this->fakeGemini();
+
+        $sessionParticipant = $this->participant();
+        $otherParticipant = $this->participant();
+
+        $this->withSession(['participant_id' => $sessionParticipant->id])
+            ->postJson(route('chatbot.chat'), [
+                'message' => 'Hola',
+                'participant_id' => $otherParticipant->id,
+            ])
+            ->assertOk();
+
+        $question = NicenitoQuestion::query()->latest('id')->first();
+        $this->assertSame($sessionParticipant->id, $question->participant_id);
+    }
+
+    public function test_question_rate_limit_blocks_rapid_requests(): void
+    {
+        $this->fakeGemini();
+        $participant = $this->participant();
+
+        $this->withSession(['participant_id' => $participant->id])
+            ->postJson(route('chatbot.chat'), ['message' => 'Primera pregunta sobre la fe'])
+            ->assertOk();
+
+        // Segunda pregunta inmediata: bloqueada por el enfriamiento.
+        $this->withSession(['participant_id' => $participant->id])
+            ->postJson(route('chatbot.chat'), ['message' => 'Segunda pregunta inmediata'])
+            ->assertStatus(429);
     }
 }

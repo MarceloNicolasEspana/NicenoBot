@@ -26,7 +26,8 @@
             <div class="relative z-10 mx-auto flex min-h-screen max-w-[1320px] items-center px-4 py-5 sm:px-6 lg:px-8">
                 <section
                     id="catequesis-chat"
-                    data-endpoint="{{ url('/api/catequesis/chat') }}"
+                    data-endpoint="{{ route('chatbot.chat') }}"
+                    data-access-url="{{ route('participant.access.show') }}"
                     class="niceno-shell grid w-full overflow-hidden lg:grid-cols-[minmax(0,0.38fr)_minmax(0,0.62fr)]"
                 >
                     <aside class="niceno-stage flex min-h-[34rem] flex-col justify-between p-5 sm:p-7 lg:min-h-[44rem] lg:p-8">
@@ -81,10 +82,16 @@
                                         class="h-10 w-10 object-contain object-top"
                                     >
                                 </div>
-                                <div class="min-w-0">
+                                <div class="min-w-0 flex-1">
                                     <h2 class="text-lg font-bold text-[var(--niceno-ink)]">Conversa con Nicenito</h2>
                                     <p class="mt-1 text-sm text-[var(--niceno-muted)]">Tus mensajes se guardan solo en este navegador.</p>
                                 </div>
+                                <form method="POST" action="{{ route('participant.logout') }}" class="shrink-0">
+                                    @csrf
+                                    <button type="submit" class="rounded-full border border-[color:var(--niceno-border)] px-3 py-1.5 text-xs font-semibold text-[var(--niceno-muted)] transition hover:bg-[color:var(--niceno-cream)]">
+                                        Salir
+                                    </button>
+                                </form>
                             </div>
                         </header>
 

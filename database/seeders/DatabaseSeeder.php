@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,11 +17,22 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $role = Role::findOrCreate(config('nicenito.admin_role'));
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // Usuario administrador de desarrollo (admin@nicenito.test / password).
+        $admin = User::query()->firstOrCreate(
+            ['email' => 'admin@nicenito.test'],
+            [
+                'name' => 'Admin Nicenito',
+                'password' => Hash::make('password'),
+            ],
+        );
+
+        $admin->assignRole($role);
+
+        $this->call([
+            NicenitoContentSeeder::class,
+            ParticipantSeeder::class,
         ]);
     }
 }

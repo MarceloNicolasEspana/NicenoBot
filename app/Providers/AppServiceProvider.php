@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Services\GeminiModelService;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -17,6 +18,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // MySQL/MariaDB antiguos limitan el largo de clave; evita el error 1071
+        // ("Specified key was too long") en índices de columnas string con utf8mb4.
+        Schema::defaultStringLength(191);
     }
 }

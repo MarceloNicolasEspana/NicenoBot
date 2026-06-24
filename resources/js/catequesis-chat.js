@@ -252,6 +252,13 @@ const initializeCatequesisChat = () => {
 
         clearAvatarTimers();
         setError();
+
+        // Historial breve (sin fuentes) que ya mantiene el frontend, anterior
+        // al mensaje actual; el backend usa a lo sumo los últimos mensajes.
+        const historyPayload = history
+            .slice(-4)
+            .map(({ role, content }) => ({ role, content }));
+
         appendMessage({ role: 'user', content: trimmedMessage });
         textarea.value = '';
         syncCounter();
@@ -259,7 +266,10 @@ const initializeCatequesisChat = () => {
         setLoading(true);
 
         try {
-            const response = await window.axios.post(endpoint, { message: trimmedMessage });
+            const response = await window.axios.post(endpoint, {
+                message: trimmedMessage,
+                history: historyPayload,
+            });
             const assistantMessage = {
                 role: 'assistant',
                 content: response.data.answer,
@@ -269,19 +279,33 @@ const initializeCatequesisChat = () => {
             setNicenitoState('respondiendo');
             appendMessage(assistantMessage);
 
+            const backendState = response.data.nicenito_state;
+
             responseStateTimer = window.setTimeout(() => {
-                setNicenitoState(evaluateResponseState({
-                    answer: assistantMessage.content,
-                    sources: assistantMessage.sources,
-                }));
+                setNicenitoState(backendState && nicenitoImages[backendState]
+                    ? backendState
+                    : evaluateResponseState({
+                        answer: assistantMessage.content,
+                        sources: assistantMessage.sources,
+                    }));
                 scheduleReturnToBase();
             }, prefersReducedMotion.matches ? 0 : 900);
         } catch (error) {
             history.pop();
             renderHistory();
 
+            // Sesi\u00f3n de participante expirada: volver al acceso.
+            if (error?.response?.status === 401) {
+                const accessUrl = root.dataset.accessUrl;
+                if (accessUrl) {
+                    window.location.href = accessUrl;
+                    return;
+                }
+            }
+
             const validationMessage = error?.response?.data?.errors?.message?.[0];
-            setError(validationMessage ?? 'Ocurri\u00f3 un problema al responder. Intenta de nuevo en unos segundos.');
+            const serverMessage = error?.response?.data?.message;
+            setError(validationMessage ?? serverMessage ?? 'Ocurri\u00f3 un problema al responder. Intenta de nuevo en unos segundos.');
             setNicenitoState('base');
         } finally {
             setLoading(false);
