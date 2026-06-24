@@ -14,13 +14,9 @@
             @vite(['resources/css/app.css', 'resources/js/app.js'])
         @endif
     </head>
-    <body class="min-h-screen bg-stone-950 text-[var(--niceno-ink)]">
+    <body class="min-h-screen bg-[var(--niceno-bg-2)] text-[var(--niceno-ink)]">
         <main class="relative min-h-screen overflow-hidden">
-            <div
-                class="page-background-image"
-                style="background-image: url('{{ asset('images/nicenito/basilica_san_pedro.png') }}')"
-                aria-hidden="true"
-            ></div>
+            <div class="page-background-image" aria-hidden="true"></div>
             <div class="page-background-veil" aria-hidden="true"></div>
 
             <div class="relative z-10 mx-auto flex min-h-screen max-w-[1320px] items-center px-4 py-5 sm:px-6 lg:px-8">
