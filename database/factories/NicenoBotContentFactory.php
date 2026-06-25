@@ -2,26 +2,26 @@
 
 namespace Database\Factories;
 
-use App\Enums\NicenitoContentStatus;
-use App\Enums\NicenitoContentType;
-use App\Models\NicenitoContent;
+use App\Enums\NicenoBotContentStatus;
+use App\Enums\NicenoBotContentType;
+use App\Models\NicenoBotContent;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
 /**
- * @extends Factory<NicenitoContent>
+ * @extends Factory<NicenoBotContent>
  */
-class NicenitoContentFactory extends Factory
+class NicenoBotContentFactory extends Factory
 {
-    protected $model = NicenitoContent::class;
+    protected $model = NicenoBotContent::class;
 
     public function definition(): array
     {
         $title = $this->faker->unique()->sentence(4);
 
         return [
-            'type' => NicenitoContentType::Fixed,
-            'status' => NicenitoContentStatus::Published,
+            'type' => NicenoBotContentType::Fixed,
+            'status' => NicenoBotContentStatus::Published,
             'category' => $this->faker->randomElement(config('nicenito.categories')),
             'title' => $title,
             'slug' => Str::slug($title).'-'.Str::random(5),
@@ -43,21 +43,21 @@ class NicenitoContentFactory extends Factory
     public function weekly(): static
     {
         return $this->state(fn () => [
-            'type' => NicenitoContentType::Weekly,
+            'type' => NicenoBotContentType::Weekly,
             'category' => null,
             'gospel_reference' => 'Mateo 10, 26-33',
-            'starts_at' => NicenitoContent::now()->subDay(),
-            'ends_at' => NicenitoContent::now()->addDays(6),
+            'starts_at' => NicenoBotContent::now()->subDay(),
+            'ends_at' => NicenoBotContent::now()->addDays(6),
         ]);
     }
 
     public function draft(): static
     {
-        return $this->state(fn () => ['status' => NicenitoContentStatus::Draft]);
+        return $this->state(fn () => ['status' => NicenoBotContentStatus::Draft]);
     }
 
     public function archived(): static
     {
-        return $this->state(fn () => ['status' => NicenitoContentStatus::Archived]);
+        return $this->state(fn () => ['status' => NicenoBotContentStatus::Archived]);
     }
 }

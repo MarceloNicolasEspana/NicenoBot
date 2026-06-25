@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum NicenitoContentType: string
+enum NicenoBotContentType: string
 {
     case Weekly = 'weekly';
     case Fixed = 'fixed';

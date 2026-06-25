@@ -1,7 +1,7 @@
-# Manual del catequista / administrador — Panel de Nicenito
+# Manual del catequista / administrador — Panel de NicenoBot
 
 Este manual es para **catequistas y administradores** que gestionan el contenido,
-los participantes y las preguntas de Nicenito desde el panel privado.
+los participantes y las preguntas de NicenoBot desde el panel privado.
 
 ---
 
@@ -34,7 +34,7 @@ Vista rápida del estado:
 
 ## 3. Contenidos
 
-Nicenito responde usando **el contenido que tú preparas**. Hay dos tipos:
+NicenoBot responde usando **el contenido que tú preparas**. Hay dos tipos:
 
 | Tipo | Cuándo usarlo | Necesita |
 |------|----------------|----------|
@@ -46,7 +46,7 @@ En **Contenidos → Nuevo contenido** (o "Editar"):
 
 - **Tipo:** Semanal o Fijo (los campos cambian según el tipo).
 - **Título** y **Slug** (el slug se genera solo desde el título si lo dejas vacío).
-- **Resumen:** 1–2 frases; se envía a Nicenito como contexto.
+- **Resumen:** 1–2 frases; se envía a NicenoBot como contexto.
 - **Contenido:** el texto completo del tema.
 - **Campos múltiples** (uno por línea, sin escribir JSON):
   - *Referencias bíblicas* (ej. `Juan 1, 1-14`)
@@ -54,13 +54,13 @@ En **Contenidos → Nuevo contenido** (o "Editar"):
   - *Ideas clave*
   - *Preguntas de reflexión*
   - *Preguntas frecuentes:* una por línea con el formato **`pregunta :: respuesta`**
-  - *Etiquetas* (separadas por coma o por línea) — **muy importantes**: ayudan a que Nicenito encuentre el contenido correcto.
+  - *Etiquetas* (separadas por coma o por línea) — **muy importantes**: ayudan a que NicenoBot encuentre el contenido correcto.
 - **Si es Semanal:** referencia del Evangelio + fecha de **inicio** y **término** (se evalúan en la zona horaria configurada, por defecto `America/Santiago`).
 - **Si es Fijo:** elige una **categoría** de la lista.
 
 Botones:
 - **Guardar borrador:** lo guarda sin publicar.
-- **Publicar:** lo deja visible para Nicenito (según su estado y, en semanal, sus fechas).
+- **Publicar:** lo deja visible para NicenoBot (según su estado y, en semanal, sus fechas).
 
 > **Regla de contenido semanal:** no pueden existir **dos semanales publicados con fechas que se solapen**.
 > Si intentas publicar uno que choca con otro, el sistema te avisa. Puedes tener varios borradores y semanas futuras programadas.
@@ -71,8 +71,8 @@ Filtra por tipo, estado, categoría o título. En cada fila: **Ver**, **Editar**
 - **Archivar:** lo saca de circulación sin borrarlo.
 - **Duplicar:** crea una copia en borrador (útil para reutilizar un tema).
 
-### 3.3 Vista previa con Nicenito
-Desde un contenido, abre **"Vista previa con Nicenito"**:
+### 3.3 Vista previa con NicenoBot
+Desde un contenido, abre **"Vista previa con NicenoBot"**:
 - Escribe una **pregunta de prueba**.
 - Verás el **contenido recuperado**, el **contexto exacto** que se enviaría al modelo, la **respuesta generada** y las **fuentes**.
 - **No afecta** conversaciones reales ni guarda la pregunta. Ideal para afinar títulos, etiquetas y FAQ.
@@ -123,7 +123,7 @@ En **Preguntas** ves lo que consultan los jóvenes, para entender los temas del 
 
 ### 5.2 Detalle de una pregunta
 Abre **"Ver"**:
-- Pregunta y respuesta de Nicenito.
+- Pregunta y respuesta de NicenoBot.
 - **Fuentes** utilizadas.
 - Datos del participante, categoría, si usó IA, si requería acompañamiento, fecha.
 
@@ -157,7 +157,7 @@ Las **notas** son privadas del equipo. (No se crean rankings ni evaluaciones de 
 
 1. **Antes del sábado:** crea el **contenido semanal** (Evangelio + resumen + ideas clave + FAQ + etiquetas) y prográmalo con sus fechas.
 2. Revisa que tus **contenidos fijos** clave estén publicados (Trinidad, oración, sacramentos…).
-3. Usa la **Vista previa** para comprobar que Nicenito responde bien a preguntas típicas.
+3. Usa la **Vista previa** para comprobar que NicenoBot responde bien a preguntas típicas.
 4. Entrega **códigos y PIN** a los jóvenes nuevos.
 5. Durante la semana, revisa **Preguntas** y marca las que necesiten **seguimiento**.
 

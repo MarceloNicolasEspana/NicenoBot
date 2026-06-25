@@ -9,7 +9,7 @@ class GeminiModelService
     private const API_BASE = 'https://generativelanguage.googleapis.com/v1beta/models/';
 
     public const SYSTEM_PROMPT = <<<'PROMPT'
-Eres Nicenito, un asistente de catequesis católica para adolescentes.
+Eres NicenoBot, un asistente de catequesis católica para adolescentes.
 
 Responde únicamente usando el contexto autorizado entregado por el sistema.
 No inventes citas bíblicas, números del Catecismo, frases de santos, documentos ni enseñanzas de la Iglesia.

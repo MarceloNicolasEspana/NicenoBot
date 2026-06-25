@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
         $admin = User::query()->firstOrCreate(
             ['email' => 'admin@nicenito.test'],
             [
-                'name' => 'Admin Nicenito',
+                'name' => 'Admin NicenoBot',
                 'password' => Hash::make('password'),
             ],
         );
@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
         $admin->assignRole($role);
 
         $this->call([
-            NicenitoContentSeeder::class,
+            NicenoBotContentSeeder::class,
             ParticipantSeeder::class,
         ]);
     }

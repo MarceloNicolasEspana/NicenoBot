@@ -8,22 +8,22 @@ const nicenitoImages = {
     finalizando: '/images/nicenito/clean/finalizando.png',
 };
 const nicenitoAlt = {
-    base: 'Nicenito esta en reposo',
-    escuchando: 'Nicenito esta escuchando',
-    pensando: 'Nicenito esta pensando',
-    respondiendo: 'Nicenito esta respondiendo',
-    explicando: 'Nicenito esta explicando',
-    celebrando: 'Nicenito esta celebrando',
-    finalizando: 'Nicenito esta finalizando la conversacion',
+    base: 'NicenoBot esta en reposo',
+    escuchando: 'NicenoBot esta escuchando',
+    pensando: 'NicenoBot esta pensando',
+    respondiendo: 'NicenoBot esta respondiendo',
+    explicando: 'NicenoBot esta explicando',
+    celebrando: 'NicenoBot esta celebrando',
+    finalizando: 'NicenoBot esta finalizando la conversacion',
 };
 const nicenitoLabels = {
-    base: 'Nicenito está listo para acompañarte.',
-    escuchando: 'Nicenito está escuchando.',
-    pensando: 'Nicenito está pensando.',
-    respondiendo: 'Nicenito está respondiendo.',
-    explicando: 'Nicenito está explicando.',
-    celebrando: 'Nicenito te anima a seguir adelante.',
-    finalizando: 'Nicenito está cerrando este momento contigo.',
+    base: 'NicenoBot está listo para acompañarte.',
+    escuchando: 'NicenoBot está escuchando.',
+    pensando: 'NicenoBot está pensando.',
+    respondiendo: 'NicenoBot está respondiendo.',
+    explicando: 'NicenoBot está explicando.',
+    celebrando: 'NicenoBot te anima a seguir adelante.',
+    finalizando: 'NicenoBot está cerrando este momento contigo.',
 };
 
 const escapeHtml = (value) =>
@@ -127,12 +127,12 @@ const initializeCatequesisChat = () => {
         window.clearTimeout(idleTimer);
         idleTimer = window.setTimeout(() => {
             if (!isSending && textarea.value.trim() === '') {
-                setNicenitoState('base');
+                setNicenoBotState('base');
             }
         }, delay);
     };
 
-    const setNicenitoState = (state) => {
+    const setNicenoBotState = (state) => {
         const nextState = nicenitoImages[state] ? state : 'base';
 
         nicenitoAvatar.dataset.state = nextState;
@@ -205,7 +205,7 @@ const initializeCatequesisChat = () => {
                 <article class="chat-row chat-row-bot">
                     <img src="/images/nicenito/clean/base.png" alt="" class="chat-mini-avatar">
                     <div class="chat-bubble chat-bubble-bot">
-                        <p>Hola, soy Nicenito. Puedes preguntarme sobre la fe, la oraci\u00f3n, Jes\u00fas, el Evangelio o los sacramentos.</p>
+                        <p>Hola, soy NicenoBot. Puedes preguntarme sobre la fe, la oraci\u00f3n, Jes\u00fas, el Evangelio o los sacramentos.</p>
                     </div>
                 </article>
             `;
@@ -240,13 +240,13 @@ const initializeCatequesisChat = () => {
 
         if (!trimmedMessage) {
             setError('Escribe una pregunta para continuar.');
-            setNicenitoState('base');
+            setNicenoBotState('base');
             return;
         }
 
         if (trimmedMessage.length > 500) {
             setError('Tu mensaje no puede superar los 500 caracteres.');
-            setNicenitoState('base');
+            setNicenoBotState('base');
             return;
         }
 
@@ -262,7 +262,7 @@ const initializeCatequesisChat = () => {
         appendMessage({ role: 'user', content: trimmedMessage });
         textarea.value = '';
         syncCounter();
-        setNicenitoState('explicando');
+        setNicenoBotState('explicando');
         setLoading(true);
 
         try {
@@ -276,13 +276,13 @@ const initializeCatequesisChat = () => {
                 sources: response.data.sources ?? [],
             };
 
-            setNicenitoState('respondiendo');
+            setNicenoBotState('respondiendo');
             appendMessage(assistantMessage);
 
             const backendState = response.data.nicenito_state;
 
             responseStateTimer = window.setTimeout(() => {
-                setNicenitoState(backendState && nicenitoImages[backendState]
+                setNicenoBotState(backendState && nicenitoImages[backendState]
                     ? backendState
                     : evaluateResponseState({
                         answer: assistantMessage.content,
@@ -306,7 +306,7 @@ const initializeCatequesisChat = () => {
             const validationMessage = error?.response?.data?.errors?.message?.[0];
             const serverMessage = error?.response?.data?.message;
             setError(validationMessage ?? serverMessage ?? 'Ocurri\u00f3 un problema al responder. Intenta de nuevo en unos segundos.');
-            setNicenitoState('base');
+            setNicenoBotState('base');
         } finally {
             setLoading(false);
         }
@@ -322,7 +322,7 @@ const initializeCatequesisChat = () => {
         window.clearTimeout(idleTimer);
 
         if (!isSending) {
-            setNicenitoState('escuchando');
+            setNicenoBotState('escuchando');
         }
     });
 
@@ -342,11 +342,11 @@ const initializeCatequesisChat = () => {
         }
 
         if (textarea.value.trim() === '') {
-            setNicenitoState('base');
+            setNicenoBotState('base');
             return;
         }
 
-        setNicenitoState('escuchando');
+        setNicenoBotState('escuchando');
     });
 
     suggestedButtons.forEach((button) => {
@@ -355,14 +355,14 @@ const initializeCatequesisChat = () => {
             window.clearTimeout(idleTimer);
             textarea.value = button.dataset.question ?? '';
             syncCounter();
-            setNicenitoState('escuchando');
+            setNicenoBotState('escuchando');
             await sendMessage(textarea.value);
         });
     });
 
     renderHistory();
     syncCounter();
-    setNicenitoState('base');
+    setNicenoBotState('base');
 };
 
 initializeCatequesisChat();

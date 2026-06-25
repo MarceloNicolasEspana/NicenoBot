@@ -2,13 +2,13 @@
 
 namespace Database\Seeders;
 
-use App\Enums\NicenitoContentStatus;
-use App\Enums\NicenitoContentType;
-use App\Models\NicenitoContent;
+use App\Enums\NicenoBotContentStatus;
+use App\Enums\NicenoBotContentType;
+use App\Models\NicenoBotContent;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
-class NicenitoContentSeeder extends Seeder
+class NicenoBotContentSeeder extends Seeder
 {
     public function run(): void
     {
@@ -67,11 +67,11 @@ class NicenitoContentSeeder extends Seeder
         );
 
         // Contenido semanal vigente para pruebas inmediatas en local.
-        NicenitoContent::query()->updateOrCreate(
+        NicenoBotContent::query()->updateOrCreate(
             ['slug' => 'no-tengan-miedo'],
             [
-                'type' => NicenitoContentType::Weekly,
-                'status' => NicenitoContentStatus::Published,
+                'type' => NicenoBotContentType::Weekly,
+                'status' => NicenoBotContentStatus::Published,
                 'category' => null,
                 'title' => 'No tengan miedo',
                 'gospel_reference' => 'Mateo 10, 26-33',
@@ -89,8 +89,8 @@ class NicenitoContentSeeder extends Seeder
                 'biblical_references' => ['Mateo 10, 26-33'],
                 'catechism_references' => [],
                 'tags' => ['miedo', 'confianza', 'valentia', 'temor'],
-                'starts_at' => NicenitoContent::now()->subDays(1)->startOfDay(),
-                'ends_at' => NicenitoContent::now()->addDays(6)->endOfDay(),
+                'starts_at' => NicenoBotContent::now()->subDays(1)->startOfDay(),
+                'ends_at' => NicenoBotContent::now()->addDays(6)->endOfDay(),
             ],
         );
     }
@@ -113,11 +113,11 @@ class NicenitoContentSeeder extends Seeder
         array $biblical,
         array $catechism,
     ): void {
-        NicenitoContent::query()->updateOrCreate(
+        NicenoBotContent::query()->updateOrCreate(
             ['slug' => Str::slug($title)],
             [
-                'type' => NicenitoContentType::Fixed,
-                'status' => NicenitoContentStatus::Published,
+                'type' => NicenoBotContentType::Fixed,
+                'status' => NicenoBotContentStatus::Published,
                 'category' => $category,
                 'title' => $title,
                 'summary' => $summary,

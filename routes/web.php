@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\Admin\NicenitoContentController;
-use App\Http\Controllers\Admin\NicenitoDashboardController;
-use App\Http\Controllers\Admin\NicenitoQuestionController;
+use App\Http\Controllers\Admin\NicenoBotContentController;
+use App\Http\Controllers\Admin\NicenoBotDashboardController;
+use App\Http\Controllers\Admin\NicenoBotQuestionController;
 use App\Http\Controllers\Admin\ParticipantController;
+use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CatequesisChatController;
 use App\Http\Controllers\Participant\AccessController;
@@ -39,25 +40,25 @@ Route::get('/login', [LoginController::class, 'show'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-// --- Panel administrativo de Nicenito -----------------------------------------
+// --- Panel administrativo de NicenoBot -----------------------------------------
 Route::middleware('nicenito.admin')
     ->prefix('admin/nicenito')
     ->name('admin.nicenito.')
     ->group(function () {
         Route::redirect('/', '/admin/nicenito/dashboard');
-        Route::get('/dashboard', [NicenitoDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/dashboard', [NicenoBotDashboardController::class, 'index'])->name('dashboard');
 
-        Route::get('/contenidos', [NicenitoContentController::class, 'index'])->name('contenidos.index');
-        Route::get('/contenidos/crear', [NicenitoContentController::class, 'create'])->name('contenidos.create');
-        Route::post('/contenidos', [NicenitoContentController::class, 'store'])->name('contenidos.store');
-        Route::get('/contenidos/{content}/editar', [NicenitoContentController::class, 'edit'])->name('contenidos.edit');
-        Route::put('/contenidos/{content}', [NicenitoContentController::class, 'update'])->name('contenidos.update');
-        Route::delete('/contenidos/{content}', [NicenitoContentController::class, 'destroy'])->name('contenidos.destroy');
+        Route::get('/contenidos', [NicenoBotContentController::class, 'index'])->name('contenidos.index');
+        Route::get('/contenidos/crear', [NicenoBotContentController::class, 'create'])->name('contenidos.create');
+        Route::post('/contenidos', [NicenoBotContentController::class, 'store'])->name('contenidos.store');
+        Route::get('/contenidos/{content}/editar', [NicenoBotContentController::class, 'edit'])->name('contenidos.edit');
+        Route::put('/contenidos/{content}', [NicenoBotContentController::class, 'update'])->name('contenidos.update');
+        Route::delete('/contenidos/{content}', [NicenoBotContentController::class, 'destroy'])->name('contenidos.destroy');
 
-        Route::match(['get', 'post'], '/contenidos/{content}/vista-previa', [NicenitoContentController::class, 'preview'])->name('contenidos.preview');
-        Route::post('/contenidos/{content}/publicar', [NicenitoContentController::class, 'publish'])->name('contenidos.publish');
-        Route::post('/contenidos/{content}/archivar', [NicenitoContentController::class, 'archive'])->name('contenidos.archive');
-        Route::post('/contenidos/{content}/duplicar', [NicenitoContentController::class, 'duplicate'])->name('contenidos.duplicate');
+        Route::match(['get', 'post'], '/contenidos/{content}/vista-previa', [NicenoBotContentController::class, 'preview'])->name('contenidos.preview');
+        Route::post('/contenidos/{content}/publicar', [NicenoBotContentController::class, 'publish'])->name('contenidos.publish');
+        Route::post('/contenidos/{content}/archivar', [NicenoBotContentController::class, 'archive'])->name('contenidos.archive');
+        Route::post('/contenidos/{content}/duplicar', [NicenoBotContentController::class, 'duplicate'])->name('contenidos.duplicate');
 
         // Participantes
         Route::get('/participantes', [ParticipantController::class, 'index'])->name('participantes.index');
@@ -72,7 +73,11 @@ Route::middleware('nicenito.admin')
         Route::post('/participantes/{participante}/regenerar-codigo', [ParticipantController::class, 'regenerateCode'])->name('participantes.regenerate-code');
 
         // Preguntas
-        Route::get('/preguntas', [NicenitoQuestionController::class, 'index'])->name('preguntas.index');
-        Route::get('/preguntas/{pregunta}', [NicenitoQuestionController::class, 'show'])->name('preguntas.show');
-        Route::put('/preguntas/{pregunta}/seguimiento', [NicenitoQuestionController::class, 'updateFollowUp'])->name('preguntas.follow-up');
+        Route::get('/preguntas', [NicenoBotQuestionController::class, 'index'])->name('preguntas.index');
+        Route::get('/preguntas/{pregunta}', [NicenoBotQuestionController::class, 'show'])->name('preguntas.show');
+        Route::put('/preguntas/{pregunta}/seguimiento', [NicenoBotQuestionController::class, 'updateFollowUp'])->name('preguntas.follow-up');
+
+        // Perfil del usuario de backoffice
+        Route::get('/perfil', [ProfileController::class, 'edit'])->name('perfil.edit');
+        Route::put('/perfil', [ProfileController::class, 'update'])->name('perfil.update');
     });

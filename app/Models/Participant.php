@@ -54,7 +54,7 @@ class Participant extends Model
 
     public function questions(): HasMany
     {
-        return $this->hasMany(NicenitoQuestion::class);
+        return $this->hasMany(NicenoBotQuestion::class);
     }
 
     // ---------------------------------------------------------------------

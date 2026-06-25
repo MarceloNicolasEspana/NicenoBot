@@ -1,19 +1,18 @@
 @extends('admin.layout')
 
-@section('title', 'Contenidos · Nicenito')
+@section('title', 'Contenidos · NicenoBot')
 
 @php
-    use App\Enums\NicenitoContentStatus;
-    use App\Enums\NicenitoContentType;
+    use App\Enums\NicenoBotContentStatus;
+    use App\Enums\NicenoBotContentType;
 @endphp
 
 @section('content')
     <div class="flex flex-wrap items-center justify-between gap-3">
         <h1 class="text-2xl font-bold text-slate-900">Contenidos</h1>
-        <a href="{{ route('admin.nicenito.contenidos.create') }}"
-            class="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-700">
+        <button type="button" class="btn-primary" data-modal-url="{{ route('admin.nicenito.contenidos.create') }}">
             Nuevo contenido
-        </a>
+        </button>
     </div>
 
     <form method="GET" class="mt-6 grid gap-3 rounded-xl border border-slate-200 bg-white p-4 sm:grid-cols-5">
@@ -21,13 +20,13 @@
             class="rounded-lg border border-slate-300 px-3 py-2 text-sm sm:col-span-2">
         <select name="type" class="rounded-lg border border-slate-300 px-3 py-2 text-sm">
             <option value="">Todos los tipos</option>
-            @foreach (NicenitoContentType::options() as $value => $label)
+            @foreach (NicenoBotContentType::options() as $value => $label)
                 <option value="{{ $value }}" @selected(($filters['type'] ?? '') === $value)>{{ $label }}</option>
             @endforeach
         </select>
         <select name="status" class="rounded-lg border border-slate-300 px-3 py-2 text-sm">
             <option value="">Todos los estados</option>
-            @foreach (NicenitoContentStatus::options() as $value => $label)
+            @foreach (NicenoBotContentStatus::options() as $value => $label)
                 <option value="{{ $value }}" @selected(($filters['status'] ?? '') === $value)>{{ $label }}</option>
             @endforeach
         </select>
@@ -69,7 +68,7 @@
                             </span>
                         </td>
                         <td class="px-4 py-3 text-slate-500">
-                            @if ($content->type === NicenitoContentType::Weekly)
+                            @if ($content->type === NicenoBotContentType::Weekly)
                                 {{ $content->starts_at?->format('d/m/Y') }} – {{ $content->ends_at?->format('d/m/Y') }}
                             @else
                                 —
@@ -79,14 +78,14 @@
                         <td class="px-4 py-3">
                             <div class="flex flex-wrap items-center justify-end gap-2">
                                 <a href="{{ route('admin.nicenito.contenidos.preview', $content) }}" class="text-slate-600 hover:underline">Ver</a>
-                                <a href="{{ route('admin.nicenito.contenidos.edit', $content) }}" class="text-slate-600 hover:underline">Editar</a>
-                                @if ($content->status !== NicenitoContentStatus::Published)
+                                <button type="button" class="text-slate-600 hover:underline" data-modal-url="{{ route('admin.nicenito.contenidos.edit', $content) }}">Editar</button>
+                                @if ($content->status !== NicenoBotContentStatus::Published)
                                     <form method="POST" action="{{ route('admin.nicenito.contenidos.publish', $content) }}">
                                         @csrf
                                         <button class="text-emerald-700 hover:underline">Publicar</button>
                                     </form>
                                 @endif
-                                @if ($content->status !== NicenitoContentStatus::Archived)
+                                @if ($content->status !== NicenoBotContentStatus::Archived)
                                     <form method="POST" action="{{ route('admin.nicenito.contenidos.archive', $content) }}">
                                         @csrf
                                         <button class="text-slate-600 hover:underline">Archivar</button>

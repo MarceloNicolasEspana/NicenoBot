@@ -1,6 +1,6 @@
 @extends('participant.layout')
 
-@section('title', 'Antes de empezar · Nicenito')
+@section('title', 'Antes de empezar · NicenoBot')
 @section('heading', 'Antes de empezar')
 
 @section('content')

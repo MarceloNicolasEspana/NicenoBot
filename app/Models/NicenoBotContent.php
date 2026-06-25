@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use App\Enums\NicenitoContentStatus;
-use App\Enums\NicenitoContentType;
+use App\Enums\NicenoBotContentStatus;
+use App\Enums\NicenoBotContentType;
 use Carbon\CarbonInterface;
-use Database\Factories\NicenitoContentFactory;
+use Database\Factories\NicenoBotContentFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -15,8 +15,8 @@ use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
- * @property NicenitoContentType $type
- * @property NicenitoContentStatus $status
+ * @property NicenoBotContentType $type
+ * @property NicenoBotContentStatus $status
  * @property string|null $category
  * @property string $title
  * @property string $slug
@@ -32,10 +32,12 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $starts_at
  * @property Carbon|null $ends_at
  */
-class NicenitoContent extends Model
+class NicenoBotContent extends Model
 {
-    /** @use HasFactory<NicenitoContentFactory> */
+    /** @use HasFactory<NicenoBotContentFactory> */
     use HasFactory, SoftDeletes;
+
+    protected $table = 'nicenito_contents';
 
     protected $fillable = [
         'type',
@@ -60,8 +62,8 @@ class NicenitoContent extends Model
     protected function casts(): array
     {
         return [
-            'type' => NicenitoContentType::class,
-            'status' => NicenitoContentStatus::class,
+            'type' => NicenoBotContentType::class,
+            'status' => NicenoBotContentStatus::class,
             'biblical_references' => 'array',
             'catechism_references' => 'array',
             'key_ideas' => 'array',
@@ -84,17 +86,17 @@ class NicenitoContent extends Model
 
     public function scopePublished(Builder $query): Builder
     {
-        return $query->where('status', NicenitoContentStatus::Published);
+        return $query->where('status', NicenoBotContentStatus::Published);
     }
 
     public function scopeWeekly(Builder $query): Builder
     {
-        return $query->where('type', NicenitoContentType::Weekly);
+        return $query->where('type', NicenoBotContentType::Weekly);
     }
 
     public function scopeFixed(Builder $query): Builder
     {
-        return $query->where('type', NicenitoContentType::Fixed);
+        return $query->where('type', NicenoBotContentType::Fixed);
     }
 
     /**
@@ -122,11 +124,11 @@ class NicenitoContent extends Model
 
     public function isActiveWeekly(?CarbonInterface $now = null): bool
     {
-        if ($this->type !== NicenitoContentType::Weekly) {
+        if ($this->type !== NicenoBotContentType::Weekly) {
             return false;
         }
 
-        if ($this->status !== NicenitoContentStatus::Published) {
+        if ($this->status !== NicenoBotContentStatus::Published) {
             return false;
         }
 
@@ -141,7 +143,7 @@ class NicenitoContent extends Model
 
     public function isPublished(): bool
     {
-        return $this->status === NicenitoContentStatus::Published;
+        return $this->status === NicenoBotContentStatus::Published;
     }
 
     /**

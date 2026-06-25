@@ -2,30 +2,30 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Enums\NicenitoContentStatus;
+use App\Enums\NicenoBotContentStatus;
 use App\Http\Controllers\Controller;
-use App\Models\NicenitoContent;
+use App\Models\NicenoBotContent;
 use Illuminate\View\View;
 
-class NicenitoDashboardController extends Controller
+class NicenoBotDashboardController extends Controller
 {
     public function index(): View
     {
-        $now = NicenitoContent::now();
+        $now = NicenoBotContent::now();
 
-        $activeWeekly = NicenitoContent::query()->activeWeekly($now)->first();
+        $activeWeekly = NicenoBotContent::query()->activeWeekly($now)->first();
 
-        $nextWeekly = NicenitoContent::query()
+        $nextWeekly = NicenoBotContent::query()
             ->weekly()
             ->published()
             ->where('starts_at', '>', $now)
             ->orderBy('starts_at')
             ->first();
 
-        $fixedPublished = NicenitoContent::query()->fixed()->published()->count();
+        $fixedPublished = NicenoBotContent::query()->fixed()->published()->count();
 
-        $drafts = NicenitoContent::query()
-            ->where('status', NicenitoContentStatus::Draft)
+        $drafts = NicenoBotContent::query()
+            ->where('status', NicenoBotContentStatus::Draft)
             ->count();
 
         return view('admin.nicenito.dashboard', compact(

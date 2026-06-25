@@ -1,10 +1,10 @@
 @extends('admin.layout')
 
-@section('title', 'Vista previa · Nicenito')
+@section('title', 'Vista previa · NicenoBot')
 
 @section('content')
     <div class="flex items-center justify-between">
-        <h1 class="text-2xl font-bold text-slate-900">Vista previa con Nicenito</h1>
+        <h1 class="text-2xl font-bold text-slate-900">Vista previa con NicenoBot</h1>
         <a href="{{ route('admin.nicenito.contenidos.edit', $content) }}" class="text-sm text-slate-600 hover:underline">← Volver a editar</a>
     </div>
     <p class="mt-1 text-sm text-slate-500">
@@ -16,7 +16,7 @@
         @csrf
         <input type="text" name="question" value="{{ $question }}" placeholder="Escribe una pregunta de prueba…"
             class="flex-1 rounded-lg border border-slate-300 px-3 py-2 text-sm">
-        <button class="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-700">Probar</button>
+        <button class="btn-primary">Probar</button>
     </form>
 
     @if ($result !== null)

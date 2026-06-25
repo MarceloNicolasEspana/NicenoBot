@@ -2,24 +2,25 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Enums\NicenitoContentStatus;
-use App\Enums\NicenitoContentType;
+use App\Enums\NicenoBotContentStatus;
+use App\Enums\NicenoBotContentType;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\NicenitoContentRequest;
-use App\Models\NicenitoContent;
+use App\Http\Requests\NicenoBotContentRequest;
+use App\Models\NicenoBotContent;
 use App\Services\GeminiModelService;
-use App\Services\NicenitoContentContextService;
+use App\Services\NicenoBotContentContextService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
-class NicenitoContentController extends Controller
+class NicenoBotContentController extends Controller
 {
     public function index(Request $request): View
     {
-        $contents = NicenitoContent::query()
+        $contents = NicenoBotContent::query()
             ->when($request->filled('type'), fn ($q) => $q->where('type', $request->string('type')))
             ->when($request->filled('status'), fn ($q) => $q->where('status', $request->string('status')))
             ->when($request->filled('category'), fn ($q) => $q->where('category', $request->string('category')))
@@ -34,50 +35,62 @@ class NicenitoContentController extends Controller
         ]);
     }
 
-    public function create(Request $request): View
+    public function create(Request $request): View|RedirectResponse
     {
-        $content = new NicenitoContent([
-            'type' => $request->string('type')->value() === NicenitoContentType::Fixed->value
-                ? NicenitoContentType::Fixed
-                : NicenitoContentType::Weekly,
-            'status' => NicenitoContentStatus::Draft,
+        $content = new NicenoBotContent([
+            'type' => $request->string('type')->value() === NicenoBotContentType::Fixed->value
+                ? NicenoBotContentType::Fixed
+                : NicenoBotContentType::Weekly,
+            'status' => NicenoBotContentStatus::Draft,
         ]);
 
-        return view('admin.nicenito.contenidos.form', [
-            'content' => $content,
-            'mode' => 'create',
-        ]);
+        if (! $request->ajax()) {
+            return redirect()->route('admin.nicenito.contenidos.index');
+        }
+
+        return view('admin.nicenito.contenidos._form', ['content' => $content, 'mode' => 'create']);
     }
 
-    public function store(NicenitoContentRequest $request): RedirectResponse
+    public function store(NicenoBotContentRequest $request): RedirectResponse|JsonResponse
     {
-        $content = new NicenitoContent($request->validated());
+        $content = new NicenoBotContent($request->validated());
         $content->created_by = Auth::id();
         $content->save();
 
-        return redirect()
-            ->route('admin.nicenito.contenidos.edit', $content)
-            ->with('status', 'Contenido creado correctamente.');
+        return $this->saved($request, 'Contenido creado correctamente.');
     }
 
-    public function edit(NicenitoContent $content): View
+    public function edit(Request $request, NicenoBotContent $content): View|RedirectResponse
     {
-        return view('admin.nicenito.contenidos.form', [
-            'content' => $content,
-            'mode' => 'edit',
-        ]);
+        if (! $request->ajax()) {
+            return redirect()->route('admin.nicenito.contenidos.index');
+        }
+
+        return view('admin.nicenito.contenidos._form', ['content' => $content, 'mode' => 'edit']);
     }
 
-    public function update(NicenitoContentRequest $request, NicenitoContent $content): RedirectResponse
+    public function update(NicenoBotContentRequest $request, NicenoBotContent $content): RedirectResponse|JsonResponse
     {
         $content->update($request->validated());
 
-        return redirect()
-            ->route('admin.nicenito.contenidos.edit', $content)
-            ->with('status', 'Contenido actualizado correctamente.');
+        return $this->saved($request, 'Contenido actualizado correctamente.');
     }
 
-    public function destroy(NicenitoContent $content): RedirectResponse
+    /**
+     * Respuesta tras guardar: JSON (con destino) para peticiones AJAX del modal,
+     * o redirección normal para envíos clásicos.
+     */
+    private function saved(Request $request, string $message): RedirectResponse|JsonResponse
+    {
+        $url = route('admin.nicenito.contenidos.index');
+        $request->session()->flash('status', $message);
+
+        return $request->expectsJson()
+            ? response()->json(['redirect' => $url])
+            : redirect($url);
+    }
+
+    public function destroy(NicenoBotContent $content): RedirectResponse
     {
         $content->delete();
 
@@ -86,35 +99,35 @@ class NicenitoContentController extends Controller
             ->with('status', 'Contenido eliminado.');
     }
 
-    public function publish(NicenitoContent $content): RedirectResponse
+    public function publish(NicenoBotContent $content): RedirectResponse
     {
         // Acción rápida desde el listado: publica un contenido ya guardado.
-        if ($content->type === NicenitoContentType::Weekly) {
+        if ($content->type === NicenoBotContentType::Weekly) {
             if ($content->starts_at === null || $content->ends_at === null) {
                 return back()->with('error', 'El contenido semanal necesita fechas antes de publicarse.');
             }
 
-            if (NicenitoContent::hasPublishedWeeklyOverlap($content->starts_at, $content->ends_at, $content->id)) {
+            if (NicenoBotContent::hasPublishedWeeklyOverlap($content->starts_at, $content->ends_at, $content->id)) {
                 return back()->with('error', 'No se puede publicar: hay otro contenido semanal publicado en ese rango de fechas.');
             }
         }
 
-        $content->update(['status' => NicenitoContentStatus::Published]);
+        $content->update(['status' => NicenoBotContentStatus::Published]);
 
         return back()->with('status', 'Contenido publicado.');
     }
 
-    public function archive(NicenitoContent $content): RedirectResponse
+    public function archive(NicenoBotContent $content): RedirectResponse
     {
-        $content->update(['status' => NicenitoContentStatus::Archived]);
+        $content->update(['status' => NicenoBotContentStatus::Archived]);
 
         return back()->with('status', 'Contenido archivado.');
     }
 
-    public function duplicate(NicenitoContent $content): RedirectResponse
+    public function duplicate(NicenoBotContent $content): RedirectResponse
     {
         $copy = $content->replicate();
-        $copy->status = NicenitoContentStatus::Draft;
+        $copy->status = NicenoBotContentStatus::Draft;
         $copy->title = $content->title.' (copia)';
         $copy->slug = Str::slug($content->title).'-copia-'.Str::random(5);
         $copy->starts_at = null;
@@ -133,8 +146,8 @@ class NicenitoContentController extends Controller
      */
     public function preview(
         Request $request,
-        NicenitoContent $content,
-        NicenitoContentContextService $contextService,
+        NicenoBotContent $content,
+        NicenoBotContentContextService $contextService,
         GeminiModelService $gemini,
     ): View {
         $question = $request->string('question')->toString();

@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Enums\FollowUpStatus;
-use App\Models\NicenitoQuestion;
+use App\Models\NicenoBotQuestion;
 use App\Models\Participant;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -41,7 +41,7 @@ class ParticipantSeeder extends Seeder
         ];
 
         foreach ($samples as $sample) {
-            NicenitoQuestion::query()->updateOrCreate(
+            NicenoBotQuestion::query()->updateOrCreate(
                 ['participant_id' => $participant->id, 'question' => $sample['question']],
                 [
                     'answer' => 'Respuesta de ejemplo generada para pruebas.',

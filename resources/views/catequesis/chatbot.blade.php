@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>Preg&uacute;ntale a Nicenito</title>
+        <title>Preg&uacute;ntale a NicenoBot</title>
 
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700|lora:600,700" rel="stylesheet" />
@@ -34,7 +34,7 @@
 
                             <div class="space-y-3">
                                 <h1 class="font-display text-4xl font-bold leading-tight text-[var(--niceno-ink)] sm:text-5xl">
-                                    Preg&uacute;ntale a Nicenito
+                                    Preg&uacute;ntale a NicenoBot
                                 </h1>
                                 <p class="max-w-md text-base leading-7 text-[var(--niceno-muted)]">
                                     Haz una pregunta sobre el Evangelio, la fe, la oraci&oacute;n o los sacramentos.
@@ -52,13 +52,13 @@
                                 <img
                                     id="nicenito-avatar-image"
                                     src="{{ asset('images/nicenito/clean/base.png') }}"
-                                    alt="Nicenito est&aacute; en reposo"
+                                    alt="NicenoBot est&aacute; en reposo"
                                     class="nicenito-avatar-image nicenito-stage-image"
                                 >
                             </div>
 
                             <div class="nicenito-status" aria-live="polite">
-                                <p id="nicenito-avatar-label">Nicenito est&aacute; listo para acompa&ntilde;arte.</p>
+                                <p id="nicenito-avatar-label">NicenoBot est&aacute; listo para acompa&ntilde;arte.</p>
                                 <span class="nicenito-status-dots" aria-hidden="true">
                                     <span></span>
                                     <span></span>
@@ -74,12 +74,12 @@
                                 <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[color:var(--niceno-cream)] ring-1 ring-[color:var(--niceno-gold-soft)]">
                                     <img
                                         src="{{ asset('images/nicenito/clean/base.png') }}"
-                                        alt="Nicenito"
+                                        alt="NicenoBot"
                                         class="h-10 w-10 object-contain object-top"
                                     >
                                 </div>
                                 <div class="min-w-0 flex-1">
-                                    <h2 class="text-lg font-bold text-[var(--niceno-ink)]">Conversa con Nicenito</h2>
+                                    <h2 class="text-lg font-bold text-[var(--niceno-ink)]">Conversa con NicenoBot</h2>
                                     <p class="mt-1 text-sm text-[var(--niceno-muted)]">Tus mensajes se guardan solo en este navegador.</p>
                                 </div>
                                 <form method="POST" action="{{ route('participant.logout') }}" class="shrink-0">
@@ -116,7 +116,7 @@
                                 <img src="{{ asset('images/nicenito/clean/base.png') }}" alt="" class="chat-mini-avatar">
                                 <div class="chat-bubble chat-bubble-bot">
                                     <p>
-                                        Hola, soy Nicenito. Puedes preguntarme sobre la fe, la oraci&oacute;n, Jes&uacute;s, el Evangelio o los sacramentos.
+                                        Hola, soy NicenoBot. Puedes preguntarme sobre la fe, la oraci&oacute;n, Jes&uacute;s, el Evangelio o los sacramentos.
                                     </p>
                                 </div>
                             </article>
@@ -125,7 +125,7 @@
                         <div id="chat-loading" class="hidden px-5 pb-3 sm:px-7">
                             <div class="inline-flex items-center gap-3 rounded-full bg-[color:var(--niceno-cream)] px-4 py-2 text-sm font-medium text-[var(--niceno-burgundy)] ring-1 ring-[color:var(--niceno-gold-soft)]">
                                 <span class="h-2.5 w-2.5 animate-pulse rounded-full bg-[var(--niceno-gold)]"></span>
-                                Nicenito est&aacute; preparando una respuesta...
+                                NicenoBot est&aacute; preparando una respuesta...
                             </div>
                         </div>
 

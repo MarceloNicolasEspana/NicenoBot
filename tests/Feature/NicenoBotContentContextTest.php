@@ -2,23 +2,23 @@
 
 namespace Tests\Feature;
 
-use App\Models\NicenitoContent;
-use App\Services\NicenitoContentContextService;
+use App\Models\NicenoBotContent;
+use App\Services\NicenoBotContentContextService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class NicenitoContentContextTest extends TestCase
+class NicenoBotContentContextTest extends TestCase
 {
     use RefreshDatabase;
 
-    private function service(): NicenitoContentContextService
+    private function service(): NicenoBotContentContextService
     {
-        return app(NicenitoContentContextService::class);
+        return app(NicenoBotContentContextService::class);
     }
 
     public function test_active_published_weekly_is_retrieved(): void
     {
-        $weekly = NicenitoContent::factory()->weekly()->create([
+        $weekly = NicenoBotContent::factory()->weekly()->create([
             'title' => 'No tengan miedo',
             'tags' => ['miedo'],
         ]);
@@ -31,9 +31,9 @@ class NicenitoContentContextTest extends TestCase
 
     public function test_expired_weekly_is_not_used(): void
     {
-        NicenitoContent::factory()->weekly()->create([
-            'starts_at' => NicenitoContent::now()->subDays(20),
-            'ends_at' => NicenitoContent::now()->subDays(13),
+        NicenoBotContent::factory()->weekly()->create([
+            'starts_at' => NicenoBotContent::now()->subDays(20),
+            'ends_at' => NicenoBotContent::now()->subDays(13),
         ]);
 
         $context = $this->service()->build('Tengo miedo de algo');
@@ -43,7 +43,7 @@ class NicenitoContentContextTest extends TestCase
 
     public function test_trinity_question_retrieves_the_right_fixed_contents(): void
     {
-        $trinity = NicenitoContent::factory()->create([
+        $trinity = NicenoBotContent::factory()->create([
             'title' => 'La Santísima Trinidad',
             'category' => 'Jesús y Trinidad',
             'tags' => ['trinidad', 'padre', 'hijo', 'espiritu santo'],
@@ -51,7 +51,7 @@ class NicenitoContentContextTest extends TestCase
         ]);
 
         // Contenido fijo irrelevante que NO debe recuperarse.
-        NicenitoContent::factory()->create([
+        NicenoBotContent::factory()->create([
             'title' => 'La oración personal',
             'category' => 'Oración',
             'tags' => ['oracion', 'rezar'],
@@ -66,7 +66,7 @@ class NicenitoContentContextTest extends TestCase
 
     public function test_generic_word_alone_does_not_pull_irrelevant_content(): void
     {
-        NicenitoContent::factory()->create([
+        NicenoBotContent::factory()->create([
             'title' => 'Los sacramentos',
             'category' => 'Sacramentos',
             'tags' => ['sacramentos', 'bautismo'],

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Acceso · Nicenito')</title>
+    <title>@yield('title', 'Acceso · NicenoBot')</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700|lora:600,700" rel="stylesheet" />
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
@@ -20,7 +20,7 @@
             <div class="w-full max-w-md rounded-3xl border border-[color:var(--niceno-gold-soft)] bg-white/92 p-7 shadow-2xl sm:p-9">
                 <div class="flex items-center gap-3">
                     <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[color:var(--niceno-cream)] ring-1 ring-[color:var(--niceno-gold-soft)]">
-                        <img src="{{ asset('images/nicenito/clean/base.png') }}" alt="Nicenito" class="h-12 w-12 object-contain object-top">
+                        <img src="{{ asset('images/nicenito/clean/base.png') }}" alt="NicenoBot" class="h-12 w-12 object-contain object-top">
                     </div>
                     <div>
                         <p class="text-xs font-semibold uppercase tracking-wide text-[var(--niceno-burgundy)]">NicenoBot</p>

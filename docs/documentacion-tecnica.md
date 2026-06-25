@@ -55,10 +55,10 @@ Navegador (Blade + Tailwind + axios)
         │  POST /chatbot-catequesis/preguntar
         ▼
 CatequesisChatController  ──►  CatequesisChatService  (orquestador)
-                                   ├─► NicenitoContentContextService  (recupera contexto + fuentes)
-                                   │        └─► NicenitoContent (Eloquent)
+                                   ├─► NicenoBotContentContextService  (recupera contexto + fuentes)
+                                   │        └─► NicenoBotContent (Eloquent)
                                    └─► GeminiModelService  (llama a la API de Gemini)
-                                   └─► NicenitoQuestion (persiste la pregunta)
+                                   └─► NicenoBotQuestion (persiste la pregunta)
 ```
 
 ### 3.2 Flujo de una pregunta (resumen)
@@ -78,10 +78,10 @@ CatequesisChatController  ──►  CatequesisChatService  (orquestador)
 
 ```
 app/
-  Console/Commands/PruneNicenitoQuestions.php      # retención/anonimización
+  Console/Commands/PruneNicenoBotQuestions.php      # retención/anonimización
   Enums/
-    NicenitoContentType.php   (weekly|fixed)
-    NicenitoContentStatus.php (draft|published|archived)
+    NicenoBotContentType.php   (weekly|fixed)
+    NicenoBotContentStatus.php (draft|published|archived)
     FollowUpStatus.php        (none|review|catechist_follow_up|resolved)
   Http/
     Controllers/
@@ -89,33 +89,33 @@ app/
       Auth/LoginController.php                      # login admin (sesión)
       Participant/AccessController.php              # acceso joven (código+PIN)
       Participant/OnboardingController.php          # cambio de PIN + privacidad
-      Admin/NicenitoDashboardController.php
-      Admin/NicenitoContentController.php
+      Admin/NicenoBotDashboardController.php
+      Admin/NicenoBotContentController.php
       Admin/ParticipantController.php
-      Admin/NicenitoQuestionController.php
+      Admin/NicenoBotQuestionController.php
     Middleware/
-      NicenitoAdmin.php                            # rol Spatie 'nicenito-admin'
+      NicenoBotAdmin.php                            # rol Spatie 'nicenito-admin'
       EnsureParticipantAuthenticated.php           # sesión de participante
       EnsureParticipantOnboarded.php               # PIN cambiado + aviso aceptado
-    Requests/NicenitoContentRequest.php            # validación de contenidos
+    Requests/NicenoBotContentRequest.php            # validación de contenidos
   Models/
-    User.php (HasRoles), NicenitoContent.php,
-    Participant.php, NicenitoQuestion.php
+    User.php (HasRoles), NicenoBotContent.php,
+    Participant.php, NicenoBotQuestion.php
   Services/
     CatequesisChatService.php                      # orquestador del chat
-    NicenitoContentContextService.php              # recuperación de contexto
+    NicenoBotContentContextService.php              # recuperación de contexto
     GeminiModelService.php                         # cliente de Gemini
 config/
   nicenito.php          # categorías, límites, retención, rol admin, etc.
   services.php          # api_key + modelo de Gemini
 database/
   migrations/…          # nicenito_contents, participants, nicenito_questions, permission_tables
-  factories/…           # NicenitoContent, Participant, NicenitoQuestion
-  seeders/…             # DatabaseSeeder, NicenitoContentSeeder, ParticipantSeeder
+  factories/…           # NicenoBotContent, Participant, NicenoBotQuestion
+  seeders/…             # DatabaseSeeder, NicenoBotContentSeeder, ParticipantSeeder
 resources/
   views/                # welcome, catequesis/chatbot, admin/*, participant/*, auth/login
   js/catequesis-chat.js # lógica del chat (estados, historial, errores)
-  css/app.css           # tokens de tema, fondo, componentes Nicenito
+  css/app.css           # tokens de tema, fondo, componentes NicenoBot
 routes/web.php          # casi todo (chat usa sesión, por eso va en web)
 ```
 
@@ -132,7 +132,7 @@ y JSON: `biblical_references`, `catechism_references`, `key_ideas`, `faq`
 (`[{question, answer}]`), `reflection_questions`, `tags`. Para semanal:
 `starts_at`/`ends_at`. `created_by` → users. `softDeletes`.
 
-Modelo `App\Models\NicenitoContent`:
+Modelo `App\Models\NicenoBotContent`:
 - Casts de enums y arrays; `starts_at`/`ends_at` como datetime.
 - Scopes: `published()`, `weekly()`, `fixed()`, `activeWeekly()`.
 - `isActiveWeekly()`: publicado **y** fecha actual dentro del rango, evaluado en
@@ -162,16 +162,16 @@ Campos: `participant_id`, `weekly_content_id` (nullable),
 `needs_human_guidance`, `follow_up_status` (enum), `follow_up_notes`,
 `follow_up_by` → users, `answered_at`.
 
-Modelo `App\Models\NicenitoQuestion`: casts de bool/array/enum/datetime;
+Modelo `App\Models\NicenoBotQuestion`: casts de bool/array/enum/datetime;
 relaciones `participant()`, `weeklyContent()`, `followUpBy()`.
 
 ### 5.4 Relaciones (resumen)
 ```
-User 1───* NicenitoContent      (created_by)
-User 1───* NicenitoQuestion     (follow_up_by)
+User 1───* NicenoBotContent      (created_by)
+User 1───* NicenoBotQuestion     (follow_up_by)
 User *───* Role/Permission      (Spatie)
-Participant 1───* NicenitoQuestion
-NicenitoContent 1───* NicenitoQuestion  (weekly_content_id, nullOnDelete)
+Participant 1───* NicenoBotQuestion
+NicenoBotContent 1───* NicenoBotQuestion  (weekly_content_id, nullOnDelete)
 ```
 
 ---
@@ -247,11 +247,11 @@ Hay **dos** sistemas independientes, deliberadamente separados.
 
 ## 8. Flujo del chatbot (RAG ligero)
 
-### 8.1 `NicenitoContentContextService::build($pregunta)`
+### 8.1 `NicenoBotContentContextService::build($pregunta)`
 Recupera el contexto autorizado y devuelve una estructura:
 ```php
 [
-  'weekly_content' => NicenitoContent|null,   // semanal vigente
+  'weekly_content' => NicenoBotContent|null,   // semanal vigente
   'fixed_contents' => Collection,             // hasta 2 fijos relevantes
   'context_text'   => string,                 // contexto compacto para el prompt
   'sources'        => array,                  // fuentes verificadas por backend
@@ -305,7 +305,7 @@ pregunta. Estados (`nicenito_state`): `respondiendo`, `explicando`, `finalizando
 ## 9. Registro de preguntas, privacidad y logging
 
 - El controlador del chat **resuelve el participante desde la sesión**, llama al
-  servicio, **persiste** `NicenitoQuestion` y retira `meta` antes de responder
+  servicio, **persiste** `NicenoBotQuestion` y retira `meta` antes de responder
   (el contrato del frontend se mantiene idéntico).
 - **Logging respetuoso**: se registran solo métricas (`participant_id`, longitud
   del mensaje, categoría, uso de Gemini, latencia, `needs_human_guidance`, errores).
@@ -338,8 +338,8 @@ si el código existe).
 Prefijo `/admin/nicenito`, todo bajo `nicenito.admin`.
 
 - **Dashboard**: semanal activo, próximo semanal, fijos publicados, borradores.
-- **Contenidos** (`NicenitoContentController`): CRUD + `publish`/`archive`/
-  `duplicate`/`preview`. Validación en `NicenitoContentRequest`:
+- **Contenidos** (`NicenoBotContentController`): CRUD + `publish`/`archive`/
+  `duplicate`/`preview`. Validación en `NicenoBotContentRequest`:
   - Campos múltiples se ingresan como texto (uno por línea; FAQ como
     `pregunta :: respuesta`) y se convierten a arrays en `prepareForValidation()`.
   - Botones "Guardar borrador"/"Publicar" mapean a `status` vía `action`.
@@ -349,7 +349,7 @@ Prefijo `/admin/nicenito`, todo bajo `nicenito.admin`.
   `must_change_pin=true`), **vista de credenciales imprimible** (el PIN se muestra
   una sola vez vía flash de sesión), editar, activar/desactivar, regenerar PIN,
   regenerar código, eliminar (soft), enlace a su historial.
-- **Preguntas** (`NicenitoQuestionController`): índice con filtros (participante,
+- **Preguntas** (`NicenoBotQuestionController`): índice con filtros (participante,
   grupo, fecha, categoría, semanal, estado, "requiere acompañamiento", "sin
   contenido", "sin respuesta"), detalle y **seguimiento** (`follow_up_status` +
   notas privadas + `follow_up_by`).
@@ -380,7 +380,7 @@ Prefijo `/admin/nicenito`, todo bajo `nicenito.admin`.
 
 - **Blade + Tailwind 4** vía `@vite`. Sin framework JS.
 - `resources/js/catequesis-chat.js`: maneja el envío con `axios`, el **historial
-  breve** en memoria, los **estados visuales** de Nicenito (imágenes en
+  breve** en memoria, los **estados visuales** de NicenoBot (imágenes en
   `public/images/nicenito/clean/*`), el contador de 500 caracteres, y los errores
   (incluye redirección a `/nicenito/acceso` ante `401`, y mensajes de `429`).
 - CSRF: el chat va por `web`; axios envía automáticamente la cookie `XSRF-TOKEN`.
@@ -395,7 +395,7 @@ Prefijo `/admin/nicenito`, todo bajo `nicenito.admin`.
 
 ## 14. Comando de retención
 
-`app/Console/Commands/PruneNicenitoQuestions.php` — firma `nicenito:prune-questions`
+`app/Console/Commands/PruneNicenoBotQuestions.php` — firma `nicenito:prune-questions`
 (`--days=` opcional). Anonimiza filas más antiguas que la retención: pone a `null`
 `question`, `answer`, `sources`, `follow_up_notes`, conservando métricas
 (categoría, uso de IA, conteos, fechas, seguimiento). Solo registra el **conteo**.
@@ -418,12 +418,12 @@ consumir Gemini**. Cobertura principal:
   fijar `participant_id`, rate limit.
 - `ParticipantAccessTest`: login correcto/incorrecto, inactivo, cambio de PIN,
   bloqueo de chatbot por `must_change_pin`, límite de intentos.
-- `NicenitoParticipantAdminTest`: ver participantes/preguntas, crear participante
+- `NicenoBotParticipantAdminTest`: ver participantes/preguntas, crear participante
   con credenciales, no autorizado, marcar seguimiento.
-- `NicenitoContentContextTest`: semanal vigente/vencido, recuperación correcta de
+- `NicenoBotContentContextTest`: semanal vigente/vencido, recuperación correcta de
   fijos por Trinidad, no arrastrar por palabras genéricas.
-- `NicenitoAdminTest`: auth/rol, crear fijo, solapamiento de semanales.
-- `PruneNicenitoQuestionsTest`: anonimización conservando métricas.
+- `NicenoBotAdminTest`: auth/rol, crear fijo, solapamiento de semanales.
+- `PruneNicenoBotQuestionsTest`: anonimización conservando métricas.
 
 Ejecutar: `php artisan test`. Estilo: `./vendor/bin/pint`.
 

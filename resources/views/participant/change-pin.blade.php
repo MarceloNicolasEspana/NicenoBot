@@ -1,6 +1,6 @@
 @extends('participant.layout')
 
-@section('title', 'Cambiar PIN · Nicenito')
+@section('title', 'Cambiar PIN · NicenoBot')
 @section('heading', 'Crea tu PIN personal')
 
 @section('content')

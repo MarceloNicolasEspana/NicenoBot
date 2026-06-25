@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\NicenitoQuestion;
+use App\Models\NicenoBotQuestion;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 
@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Log;
  *   Schedule::command('nicenito:prune-questions')->daily();
  * y correr el scheduler del sistema:  php artisan schedule:work
  */
-class PruneNicenitoQuestions extends Command
+class PruneNicenoBotQuestions extends Command
 {
     protected $signature = 'nicenito:prune-questions {--days= : Sobrescribe los días de retención}';
 
@@ -26,7 +26,7 @@ class PruneNicenitoQuestions extends Command
         $days = (int) ($this->option('days') ?? config('nicenito.question_retention_days', 90));
         $cutoff = now()->subDays($days);
 
-        $count = NicenitoQuestion::query()
+        $count = NicenoBotQuestion::query()
             ->where('created_at', '<', $cutoff)
             ->where(function ($q) {
                 $q->whereNotNull('question')

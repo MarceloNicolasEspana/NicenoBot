@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
-use App\Models\NicenitoContent;
-use App\Models\NicenitoQuestion;
+use App\Models\NicenoBotContent;
+use App\Models\NicenoBotQuestion;
 use App\Models\Participant;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
@@ -18,7 +18,7 @@ class CatequesisChatTest extends TestCase
         return Participant::factory()->create();
     }
 
-    private function fakeGemini(string $text = 'Respuesta de prueba de Nicenito.'): void
+    private function fakeGemini(string $text = 'Respuesta de prueba de NicenoBot.'): void
     {
         Http::fake([
             'generativelanguage.googleapis.com/*' => Http::response([
@@ -41,7 +41,7 @@ class CatequesisChatTest extends TestCase
         $this->withSession(['participant_id' => $this->participant()->id])
             ->get('/chatbot-catequesis')
             ->assertOk()
-            ->assertSee('Preg&uacute;ntale a Nicenito', false);
+            ->assertSee('Preg&uacute;ntale a NicenoBot', false);
     }
 
     public function test_chat_endpoint_validates_message_length(): void
@@ -57,7 +57,7 @@ class CatequesisChatTest extends TestCase
         Http::fake();
 
         $this->withSession(['participant_id' => $this->participant()->id])
-            ->postJson(route('chatbot.chat'), ['message' => 'Hola Nicenito'])
+            ->postJson(route('chatbot.chat'), ['message' => 'Hola NicenoBot'])
             ->assertOk()
             ->assertJsonPath('nicenito_state', 'respondiendo')
             ->assertJsonMissingPath('meta');
@@ -70,7 +70,7 @@ class CatequesisChatTest extends TestCase
         $this->fakeGemini();
 
         $participant = $this->participant();
-        NicenitoContent::factory()->weekly()->create([
+        NicenoBotContent::factory()->weekly()->create([
             'gospel_reference' => 'Mateo 10, 26-33',
             'biblical_references' => ['Mateo 10, 26-33'],
             'tags' => ['miedo'],
@@ -101,7 +101,7 @@ class CatequesisChatTest extends TestCase
             ])
             ->assertOk();
 
-        $question = NicenitoQuestion::query()->latest('id')->first();
+        $question = NicenoBotQuestion::query()->latest('id')->first();
         $this->assertSame($sessionParticipant->id, $question->participant_id);
     }
 

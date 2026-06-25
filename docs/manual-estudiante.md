@@ -1,13 +1,13 @@
-# Manual del estudiante — Pregúntale a Nicenito
+# Manual del estudiante — Pregúntale a NicenoBot
 
-Este manual es para los **jóvenes de catequesis** que van a conversar con Nicenito.
+Este manual es para los **jóvenes de catequesis** que van a conversar con NicenoBot.
 No necesitas correo, teléfono ni instalar nada: solo un **código** y un **PIN** que te entrega tu catequista.
 
 ---
 
-## 1. ¿Qué es Nicenito?
+## 1. ¿Qué es NicenoBot?
 
-Nicenito es un asistente que te acompaña en tu camino de fe. Puedes preguntarle sobre:
+NicenoBot es un asistente que te acompaña en tu camino de fe. Puedes preguntarle sobre:
 
 - el **Evangelio** del domingo,
 - la **oración** (cómo rezar, cuándo, etc.),
@@ -16,7 +16,7 @@ Nicenito es un asistente que te acompaña en tu camino de fe. Puedes preguntarle
 
 Responde con un lenguaje sencillo y cercano, usando el contenido preparado por tu equipo de catequesis.
 
-> Nicenito es una **ayuda para aprender y reflexionar**. No reemplaza a tu catequista, sacerdote o a un adulto de confianza.
+> NicenoBot es una **ayuda para aprender y reflexionar**. No reemplaza a tu catequista, sacerdote o a un adulto de confianza.
 
 ---
 
@@ -36,7 +36,7 @@ Si no los tienes, **pídeselos a tu catequista**.
 ## 3. Cómo ingresar (paso a paso)
 
 ### Paso 1 — Abre la página
-Entra a la página de Nicenito. En la pantalla de inicio pulsa **"Ingresar para conversar"**
+Entra a la página de NicenoBot. En la pantalla de inicio pulsa **"Ingresar para conversar"**
 (o ve directamente a la dirección **`/nicenito/acceso`**).
 
 ### Paso 2 — Escribe tu código y PIN
@@ -56,7 +56,7 @@ La primera vez, por seguridad, debes **cambiar el PIN temporal por uno tuyo**:
 Verás un mensaje breve sobre privacidad. Marca **"Entiendo"** y pulsa **Continuar al chat**.
 
 ### Paso 5 — ¡Listo, a conversar!
-Ya estás dentro del chat de Nicenito.
+Ya estás dentro del chat de NicenoBot.
 
 ---
 
@@ -65,8 +65,8 @@ Ya estás dentro del chat de Nicenito.
 - **Escribe tu pregunta** en el cuadro de abajo y pulsa **Enviar**.
 - Puedes usar las **sugerencias rápidas** (los botones con preguntas de ejemplo) para partir.
 - Cada mensaje puede tener **hasta 500 caracteres** (verás un contador, ej. `120/500`).
-- Nicenito puede mostrar las **fuentes** que usó (Evangelio, Biblia o Catecismo) debajo de su respuesta.
-- El personaje de Nicenito **cambia de gesto** según lo que está haciendo (escuchando, pensando, explicando…). Es solo para acompañarte.
+- NicenoBot puede mostrar las **fuentes** que usó (Evangelio, Biblia o Catecismo) debajo de su respuesta.
+- El personaje de NicenoBot **cambia de gesto** según lo que está haciendo (escuchando, pensando, explicando…). Es solo para acompañarte.
 
 ### Buenas preguntas de ejemplo
 - "¿Qué significa el Evangelio de este domingo?"
@@ -113,5 +113,5 @@ Tus preguntas quedan registradas para que el equipo de catequesis entienda mejor
 ## 7. Recuerda
 
 - Tu **código** es fijo; tu **PIN** es personal y secreto.
-- Nicenito te ayuda, pero las dudas importantes conviene conversarlas también con tu **catequista o sacerdote**.
-- El nombre viene del Concilio de Nicea: **Nicea → Niceno → Nicenito**.
+- NicenoBot te ayuda, pero las dudas importantes conviene conversarlas también con tu **catequista o sacerdote**.
+- El nombre viene del Concilio de Nicea: **Nicea → Niceno → NicenoBot**.

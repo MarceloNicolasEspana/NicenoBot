@@ -3,16 +3,16 @@
 namespace Database\Factories;
 
 use App\Enums\FollowUpStatus;
-use App\Models\NicenitoQuestion;
+use App\Models\NicenoBotQuestion;
 use App\Models\Participant;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<NicenitoQuestion>
+ * @extends Factory<NicenoBotQuestion>
  */
-class NicenitoQuestionFactory extends Factory
+class NicenoBotQuestionFactory extends Factory
 {
-    protected $model = NicenitoQuestion::class;
+    protected $model = NicenoBotQuestion::class;
 
     public function definition(): array
     {

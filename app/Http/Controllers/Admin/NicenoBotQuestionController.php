@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enums\FollowUpStatus;
 use App\Http\Controllers\Controller;
-use App\Models\NicenitoContent;
-use App\Models\NicenitoQuestion;
+use App\Models\NicenoBotContent;
+use App\Models\NicenoBotQuestion;
 use App\Models\Participant;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -13,11 +13,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
-class NicenitoQuestionController extends Controller
+class NicenoBotQuestionController extends Controller
 {
     public function index(Request $request): View
     {
-        $questions = NicenitoQuestion::query()
+        $questions = NicenoBotQuestion::query()
             ->with(['participant', 'weeklyContent'])
             ->when($request->filled('participant_id'), fn ($q) => $q->where('participant_id', $request->integer('participant_id')))
             ->when($request->filled('group'), fn ($q) => $q->whereHas('participant', fn ($p) => $p->where('group_name', $request->string('group'))))
@@ -35,20 +35,20 @@ class NicenitoQuestionController extends Controller
         return view('admin.nicenito.preguntas.index', [
             'questions' => $questions,
             'participants' => Participant::query()->orderBy('full_name')->get(['id', 'full_name']),
-            'weeklyContents' => NicenitoContent::query()->weekly()->orderByDesc('starts_at')->get(['id', 'title']),
+            'weeklyContents' => NicenoBotContent::query()->weekly()->orderByDesc('starts_at')->get(['id', 'title']),
             'groups' => Participant::query()->whereNotNull('group_name')->distinct()->pluck('group_name'),
             'filters' => $request->all(),
         ]);
     }
 
-    public function show(NicenitoQuestion $pregunta): View
+    public function show(NicenoBotQuestion $pregunta): View
     {
         $pregunta->load(['participant', 'weeklyContent', 'followUpBy']);
 
         return view('admin.nicenito.preguntas.show', ['question' => $pregunta]);
     }
 
-    public function updateFollowUp(Request $request, NicenitoQuestion $pregunta): RedirectResponse
+    public function updateFollowUp(Request $request, NicenoBotQuestion $pregunta): RedirectResponse
     {
         $validated = $request->validate([
             'follow_up_status' => ['required', Rule::enum(FollowUpStatus::class)],

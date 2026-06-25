@@ -2,15 +2,15 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\NicenitoContentStatus;
-use App\Enums\NicenitoContentType;
-use App\Models\NicenitoContent;
+use App\Enums\NicenoBotContentStatus;
+use App\Enums\NicenoBotContentType;
+use App\Models\NicenoBotContent;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
-class NicenitoContentRequest extends FormRequest
+class NicenoBotContentRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -27,9 +27,9 @@ class NicenitoContentRequest extends FormRequest
         // Los botones "Guardar borrador" / "Publicar" llegan como action.
         $action = $this->input('action');
         if ($action === 'publish') {
-            $this->merge(['status' => NicenitoContentStatus::Published->value]);
+            $this->merge(['status' => NicenoBotContentStatus::Published->value]);
         } elseif ($action === 'draft') {
-            $this->merge(['status' => NicenitoContentStatus::Draft->value]);
+            $this->merge(['status' => NicenoBotContentStatus::Draft->value]);
         }
 
         $this->merge([
@@ -51,8 +51,8 @@ class NicenitoContentRequest extends FormRequest
         $id = $this->route('content')?->id;
 
         return [
-            'type' => ['required', Rule::enum(NicenitoContentType::class)],
-            'status' => ['required', Rule::enum(NicenitoContentStatus::class)],
+            'type' => ['required', Rule::enum(NicenoBotContentType::class)],
+            'status' => ['required', Rule::enum(NicenoBotContentStatus::class)],
             'title' => ['required', 'string', 'max:180'],
             'slug' => ['required', 'string', 'max:200', Rule::unique('nicenito_contents', 'slug')->ignore($id)],
             'summary' => ['required', 'string', 'max:1000'],
@@ -62,26 +62,26 @@ class NicenitoContentRequest extends FormRequest
                 'nullable',
                 'string',
                 Rule::in(config('nicenito.categories')),
-                Rule::requiredIf(fn () => $this->input('type') === NicenitoContentType::Fixed->value),
+                Rule::requiredIf(fn () => $this->input('type') === NicenoBotContentType::Fixed->value),
             ],
 
             'gospel_reference' => [
                 'nullable',
                 'string',
                 'max:180',
-                Rule::requiredIf(fn () => $this->input('type') === NicenitoContentType::Weekly->value),
+                Rule::requiredIf(fn () => $this->input('type') === NicenoBotContentType::Weekly->value),
             ],
 
             'starts_at' => [
                 'nullable',
                 'date',
-                Rule::requiredIf(fn () => $this->input('type') === NicenitoContentType::Weekly->value),
+                Rule::requiredIf(fn () => $this->input('type') === NicenoBotContentType::Weekly->value),
             ],
             'ends_at' => [
                 'nullable',
                 'date',
                 'after:starts_at',
-                Rule::requiredIf(fn () => $this->input('type') === NicenitoContentType::Weekly->value),
+                Rule::requiredIf(fn () => $this->input('type') === NicenoBotContentType::Weekly->value),
             ],
 
             'biblical_references' => ['array'],
@@ -129,15 +129,15 @@ class NicenitoContentRequest extends FormRequest
 
     private function isPublishedWeekly(): bool
     {
-        return $this->input('type') === NicenitoContentType::Weekly->value
-            && $this->input('status') === NicenitoContentStatus::Published->value
+        return $this->input('type') === NicenoBotContentType::Weekly->value
+            && $this->input('status') === NicenoBotContentStatus::Published->value
             && filled($this->input('starts_at'))
             && filled($this->input('ends_at'));
     }
 
     private function overlapsWithPublishedWeekly(): bool
     {
-        return NicenitoContent::hasPublishedWeeklyOverlap(
+        return NicenoBotContent::hasPublishedWeeklyOverlap(
             Carbon::parse($this->input('starts_at')),
             Carbon::parse($this->input('ends_at')),
             $this->route('content')?->id,

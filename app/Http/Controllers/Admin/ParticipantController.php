@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Participant;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -29,15 +30,19 @@ class ParticipantController extends Controller
         ]);
     }
 
-    public function create(): View
+    public function create(Request $request): View|RedirectResponse
     {
-        return view('admin.nicenito.participantes.form', [
+        if (! $request->ajax()) {
+            return redirect()->route('admin.nicenito.participantes.index');
+        }
+
+        return view('admin.nicenito.participantes._form', [
             'participant' => new Participant(['is_active' => true]),
             'mode' => 'create',
         ]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request): RedirectResponse|JsonResponse
     {
         $data = $this->validateData($request);
 
@@ -48,26 +53,37 @@ class ParticipantController extends Controller
         $participant->must_change_pin = true;
         $participant->save();
 
-        return redirect()
-            ->route('admin.nicenito.participantes.credentials', $participant)
-            ->with('temp_pin', $pin);
+        // Tras crear, vamos a la vista imprimible de credenciales (muestra el PIN).
+        $url = route('admin.nicenito.participantes.credentials', $participant);
+        $request->session()->flash('temp_pin', $pin);
+
+        return $request->expectsJson()
+            ? response()->json(['redirect' => $url])
+            : redirect($url);
     }
 
-    public function edit(Participant $participante): View
+    public function edit(Request $request, Participant $participante): View|RedirectResponse
     {
-        return view('admin.nicenito.participantes.form', [
+        if (! $request->ajax()) {
+            return redirect()->route('admin.nicenito.participantes.index');
+        }
+
+        return view('admin.nicenito.participantes._form', [
             'participant' => $participante,
             'mode' => 'edit',
         ]);
     }
 
-    public function update(Request $request, Participant $participante): RedirectResponse
+    public function update(Request $request, Participant $participante): RedirectResponse|JsonResponse
     {
         $participante->update($this->validateData($request));
 
-        return redirect()
-            ->route('admin.nicenito.participantes.index')
-            ->with('status', 'Participante actualizado.');
+        $url = route('admin.nicenito.participantes.index');
+        $request->session()->flash('status', 'Participante actualizado.');
+
+        return $request->expectsJson()
+            ? response()->json(['redirect' => $url])
+            : redirect($url);
     }
 
     public function destroy(Participant $participante): RedirectResponse

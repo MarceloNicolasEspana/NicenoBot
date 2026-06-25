@@ -1,6 +1,6 @@
 @extends('admin.layout')
 
-@section('title', 'Detalle de pregunta · Nicenito')
+@section('title', 'Detalle de pregunta · NicenoBot')
 
 @section('content')
     <div class="flex items-center justify-between">
@@ -15,7 +15,7 @@
                 <p class="mt-2 text-sm text-slate-800">{{ $question->question ?? '(contenido anonimizado)' }}</p>
             </div>
             <div class="rounded-xl border border-slate-200 bg-white p-5">
-                <h2 class="text-sm font-semibold text-slate-700">Respuesta de Nicenito</h2>
+                <h2 class="text-sm font-semibold text-slate-700">Respuesta de NicenoBot</h2>
                 <p class="mt-2 whitespace-pre-line text-sm text-slate-800">{{ $question->answer ?? '(contenido anonimizado)' }}</p>
             </div>
             <div class="rounded-xl border border-slate-200 bg-white p-5">
@@ -59,7 +59,7 @@
                 @if ($question->followUpBy)
                     <p class="mt-2 text-xs text-slate-400">Última actualización por {{ $question->followUpBy->name }}</p>
                 @endif
-                <button class="mt-3 w-full rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-700">Guardar seguimiento</button>
+                <button class="btn-primary mt-3 w-full">Guardar seguimiento</button>
             </form>
         </div>
     </div>

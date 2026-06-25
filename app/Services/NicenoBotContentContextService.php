@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\NicenitoContent;
+use App\Models\NicenoBotContent;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
@@ -18,14 +18,14 @@ use Illuminate\Support\Str;
  *
  * @phpstan-type Source array{type:string,reference:string,title:string}
  * @phpstan-type ContextResult array{
- *     weekly_content: NicenitoContent|null,
- *     fixed_contents: Collection<int,NicenitoContent>,
+ *     weekly_content: NicenoBotContent|null,
+ *     fixed_contents: Collection<int,NicenoBotContent>,
  *     context_text: string,
  *     sources: array<int,Source>,
  *     confidence: float
  * }
  */
-class NicenitoContentContextService
+class NicenoBotContentContextService
 {
     /**
      * @return ContextResult
@@ -36,7 +36,7 @@ class NicenitoContentContextService
         $tokens = $this->tokenize($question);
         $normalizedQuestion = $this->normalize($question);
 
-        $weekly = NicenitoContent::query()->activeWeekly()->first();
+        $weekly = NicenoBotContent::query()->activeWeekly()->first();
         $fixed = $this->relevantFixedContents($tokens, $normalizedQuestion, $limits);
 
         $sources = $this->buildSources($weekly, $fixed);
@@ -54,7 +54,7 @@ class NicenitoContentContextService
     /**
      * @param  array<int,string>  $tokens
      * @param  array<string,mixed>  $limits
-     * @return Collection<int,NicenitoContent>
+     * @return Collection<int,NicenoBotContent>
      */
     private function relevantFixedContents(array $tokens, string $normalizedQuestion, array $limits): Collection
     {
@@ -62,17 +62,17 @@ class NicenitoContentContextService
             return collect();
         }
 
-        return NicenitoContent::query()
+        return NicenoBotContent::query()
             ->fixed()
             ->published()
             ->get()
-            ->map(function (NicenitoContent $content) use ($tokens, $normalizedQuestion) {
+            ->map(function (NicenoBotContent $content) use ($tokens, $normalizedQuestion) {
                 $content->setAttribute('relevance_score', $this->score($content, $tokens, $normalizedQuestion));
 
                 return $content;
             })
-            ->filter(fn (NicenitoContent $content) => $content->getAttribute('relevance_score') >= $limits['min_relevance_score'])
-            ->sortByDesc(fn (NicenitoContent $content) => $content->getAttribute('relevance_score'))
+            ->filter(fn (NicenoBotContent $content) => $content->getAttribute('relevance_score') >= $limits['min_relevance_score'])
+            ->sortByDesc(fn (NicenoBotContent $content) => $content->getAttribute('relevance_score'))
             ->take($limits['max_fixed_contents'])
             ->values();
     }
@@ -84,7 +84,7 @@ class NicenitoContentContextService
      *
      * @param  array<int,string>  $tokens
      */
-    private function score(NicenitoContent $content, array $tokens, string $normalizedQuestion): float
+    private function score(NicenoBotContent $content, array $tokens, string $normalizedQuestion): float
     {
         $fields = [
             'title' => 3.0,
@@ -132,11 +132,11 @@ class NicenitoContentContextService
     /**
      * @param  array<string,mixed>  $limits
      */
-    private function buildContextText(?NicenitoContent $weekly, Collection $fixed, array $limits): string
+    private function buildContextText(?NicenoBotContent $weekly, Collection $fixed, array $limits): string
     {
         $blocks = [];
 
-        if ($weekly instanceof NicenitoContent) {
+        if ($weekly instanceof NicenoBotContent) {
             $blocks[] = $this->weeklyBlock($weekly, $limits);
         }
 
@@ -156,7 +156,7 @@ class NicenitoContentContextService
     /**
      * @param  array<string,mixed>  $limits
      */
-    private function weeklyBlock(NicenitoContent $weekly, array $limits): string
+    private function weeklyBlock(NicenoBotContent $weekly, array $limits): string
     {
         $lines = ['[CONTENIDO SEMANAL]'];
         $lines[] = 'Título: '.$weekly->title;
@@ -184,7 +184,7 @@ class NicenitoContentContextService
     /**
      * @param  array<string,mixed>  $limits
      */
-    private function fixedBlock(NicenitoContent $content, array $limits): string
+    private function fixedBlock(NicenoBotContent $content, array $limits): string
     {
         $lines = ['[CONTENIDO FIJO]'];
         $lines[] = 'Título: '.$content->title;
@@ -204,11 +204,11 @@ class NicenitoContentContextService
      *
      * @return array<int,array{type:string,reference:string,title:string}>
      */
-    private function buildSources(?NicenitoContent $weekly, Collection $fixed): array
+    private function buildSources(?NicenoBotContent $weekly, Collection $fixed): array
     {
         $sources = [];
 
-        if ($weekly instanceof NicenitoContent && filled($weekly->gospel_reference)) {
+        if ($weekly instanceof NicenoBotContent && filled($weekly->gospel_reference)) {
             $sources[] = [
                 'type' => 'Evangelio',
                 'reference' => $weekly->gospel_reference,
@@ -216,7 +216,7 @@ class NicenitoContentContextService
             ];
         }
 
-        $contents = $weekly instanceof NicenitoContent
+        $contents = $weekly instanceof NicenoBotContent
             ? collect([$weekly])->concat($fixed)
             : $fixed;
 
@@ -239,9 +239,9 @@ class NicenitoContentContextService
     /**
      * @param  array<int,string>  $tokens
      */
-    private function confidence(?NicenitoContent $weekly, Collection $fixed, array $tokens): float
+    private function confidence(?NicenoBotContent $weekly, Collection $fixed, array $tokens): float
     {
-        $confidence = $weekly instanceof NicenitoContent ? 0.3 : 0.0;
+        $confidence = $weekly instanceof NicenoBotContent ? 0.3 : 0.0;
 
         $topScore = (float) ($fixed->first()?->getAttribute('relevance_score') ?? 0.0);
         // Normalizamos el puntaje contra una referencia razonable de "buena
@@ -251,7 +251,7 @@ class NicenitoContentContextService
         return round(min(1.0, $confidence), 2);
     }
 
-    private function faqText(NicenitoContent $content): string
+    private function faqText(NicenoBotContent $content): string
     {
         return collect($content->faq ?? [])
             ->map(fn (array $row) => trim(($row['question'] ?? '').' '.($row['answer'] ?? '')))

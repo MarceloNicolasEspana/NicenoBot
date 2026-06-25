@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 /**
- * Orquesta la respuesta de Nicenito.
+ * Orquesta la respuesta de NicenoBot.
  *
  * Flujo (Fase 1):
  *  1. Saludos / despedidas simples -> respuesta local breve (no llama a Gemini).
@@ -23,7 +23,7 @@ class CatequesisChatService
     private const FAREWELLS = ['adios', 'chao', 'hasta luego', 'hasta pronto', 'nos vemos', 'gracias por todo', 'me despido'];
 
     public function __construct(
-        private readonly NicenitoContentContextService $context,
+        private readonly NicenoBotContentContextService $context,
         private readonly GeminiModelService $gemini,
     ) {}
 
@@ -52,7 +52,7 @@ class CatequesisChatService
             $this->log('greeting', false, null);
 
             return $this->reply(
-                'Hola, soy Nicenito. ¿Sobre qué te gustaría conversar hoy: el Evangelio, la oración, los sacramentos o alguna duda de la fe?',
+                'Hola, soy NicenoBot. ¿Sobre qué te gustaría conversar hoy: el Evangelio, la oración, los sacramentos o alguna duda de la fe?',
                 state: 'respondiendo',
                 meta: $this->meta('greeting', false),
             );

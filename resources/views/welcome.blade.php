@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>NicenoBot · Pregúntale a Nicenito</title>
-    <meta name="description" content="Nicenito es un asistente de catequesis católica que acompaña a los jóvenes a entender el Evangelio, la oración, los sacramentos y la fe.">
+    <title>NicenoBot · Pregúntale a NicenoBot</title>
+    <meta name="description" content="NicenoBot es un asistente de catequesis católica que acompaña a los jóvenes a entender el Evangelio, la oración, los sacramentos y la fe.">
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700|lora:600,700" rel="stylesheet" />
@@ -42,7 +42,7 @@
                             Catequesis acompañada
                         </p>
                         <h1 class="mt-3 font-display text-4xl font-bold leading-tight text-[var(--niceno-ink)] sm:text-5xl">
-                            Pregúntale a Nicenito
+                            Pregúntale a NicenoBot
                         </h1>
                         <p class="mt-4 max-w-xl text-base leading-7 text-[var(--niceno-muted)]">
                             Un asistente para tu camino de fe. Conversa sobre el Evangelio del domingo,
@@ -71,14 +71,14 @@
                     </div>
                 </div>
 
-                {{-- Presencia de Nicenito --}}
+                {{-- Presencia de NicenoBot --}}
                 <div class="order-1 flex justify-center lg:order-2">
                     <div class="nicenito-presence nicenito--explicando">
                         <div class="nicenito-arch mx-auto">
                             <div class="nicenito-halo" aria-hidden="true"></div>
                             <img
                                 src="{{ asset('images/nicenito/clean/explicando.png') }}"
-                                alt="Nicenito te acompaña"
+                                alt="NicenoBot te acompaña"
                                 class="nicenito-stage-image"
                             >
                         </div>
@@ -91,7 +91,7 @@
                 <div class="text-center">
                     <h2 class="font-display text-3xl font-bold text-[var(--niceno-ink-warm)] sm:text-4xl">Cómo funciona</h2>
                     <p class="mx-auto mt-2 max-w-2xl text-sm leading-6 text-[var(--niceno-muted-warm)]">
-                        Así acompaña Nicenito hoy a los jóvenes de catequesis, paso a paso.
+                        Así acompaña NicenoBot hoy a los jóvenes de catequesis, paso a paso.
                     </p>
                 </div>
 
@@ -107,12 +107,12 @@
                                 'd' => 'Puedes preguntar sobre el Evangelio del domingo, la oración, los sacramentos o cualquier duda de fe. Hay sugerencias rápidas para partir, y cada mensaje admite hasta 500 caracteres.',
                             ],
                             [
-                                't' => 'Nicenito responde desde tu catequesis',
+                                't' => 'NicenoBot responde desde tu catequesis',
                                 'd' => 'Busca primero en el contenido preparado por tu equipo (el tema semanal y temas fijos de doctrina) y, con ese contexto, redacta una respuesta sencilla y cercana. Si solo saludas, responde breve sin más.',
                             ],
                             [
                                 't' => 'Verás las fuentes y, si hace falta, una guía',
-                                'd' => 'Cada respuesta puede mostrar sus fuentes (Evangelio, Biblia o Catecismo). Si una pregunta excede lo disponible, Nicenito te recomienda conversarla con tu catequista, sacerdote o un adulto de confianza.',
+                                'd' => 'Cada respuesta puede mostrar sus fuentes (Evangelio, Biblia o Catecismo). Si una pregunta excede lo disponible, NicenoBot te recomienda conversarla con tu catequista, sacerdote o un adulto de confianza.',
                             ],
                         ];
                     @endphp
@@ -137,7 +137,7 @@
                             ['t' => 'El Evangelio', 'd' => 'Entiende la lectura del domingo y qué te dice Jesús hoy.'],
                             ['t' => 'La oración', 'd' => 'Aprende a rezar con tus palabras y a hacerle un espacio a Dios.'],
                             ['t' => 'Los sacramentos', 'd' => 'Confesión, Eucaristía, Confirmación y el sentido de cada uno.'],
-                            ['t' => 'Tus dudas de fe', 'd' => 'Pregunta con confianza; Nicenito te orienta con respeto.'],
+                            ['t' => 'Tus dudas de fe', 'd' => 'Pregunta con confianza; NicenoBot te orienta con respeto.'],
                         ];
                     @endphp
                     @foreach ($temas as $tema)
@@ -150,9 +150,9 @@
 
                 <div class="mt-8 flex flex-col items-center gap-4 rounded-2xl bg-[var(--niceno-ink)]/92 px-6 py-6 text-center backdrop-blur">
                     <p class="text-sm leading-6 text-white/90">
-                        Nicenito es una ayuda para aprender y reflexionar. No reemplaza la conversación con tu
+                        NicenoBot es una ayuda para aprender y reflexionar. No reemplaza la conversación con tu
                         catequista, sacerdote o adulto responsable. El nombre recuerda el Concilio de Nicea:
-                        <span class="text-white">Nicea → Niceno → Nicenito</span>.
+                        <span class="text-white">Nicea → Niceno → NicenoBot</span>.
                     </p>
                     <a
                         href="{{ route('participant.access.show') }}"

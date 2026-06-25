@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
  * autenticados con el rol configurado en config('nicenito.admin_role') pueden
  * continuar. Si no hay sesión, se redirige al login.
  */
-class NicenitoAdmin
+class NicenoBotAdmin
 {
     public function handle(Request $request, Closure $next): Response
     {
@@ -24,7 +24,7 @@ class NicenitoAdmin
 
         $role = config('nicenito.admin_role');
 
-        abort_unless(Auth::user()->hasRole($role), 403, 'No tienes acceso al panel de Nicenito.');
+        abort_unless(Auth::user()->hasRole($role), 403, 'No tienes acceso al panel de NicenoBot.');
 
         return $next($request);
     }

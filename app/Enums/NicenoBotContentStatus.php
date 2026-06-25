@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum NicenitoContentStatus: string
+enum NicenoBotContentStatus: string
 {
     case Draft = 'draft';
     case Published = 'published';

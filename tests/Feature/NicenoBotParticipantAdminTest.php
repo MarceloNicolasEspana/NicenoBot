@@ -2,14 +2,14 @@
 
 namespace Tests\Feature;
 
-use App\Models\NicenitoQuestion;
+use App\Models\NicenoBotQuestion;
 use App\Models\Participant;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
-class NicenitoParticipantAdminTest extends TestCase
+class NicenoBotParticipantAdminTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -23,7 +23,7 @@ class NicenitoParticipantAdminTest extends TestCase
 
     public function test_admin_can_view_participants_and_questions(): void
     {
-        Participant::factory()->has(NicenitoQuestion::factory()->count(2), 'questions')->create();
+        Participant::factory()->has(NicenoBotQuestion::factory()->count(2), 'questions')->create();
 
         $admin = $this->admin();
         $this->actingAs($admin)->get('/admin/nicenito/participantes')->assertOk();
@@ -57,7 +57,7 @@ class NicenitoParticipantAdminTest extends TestCase
 
     public function test_admin_can_mark_follow_up(): void
     {
-        $question = NicenitoQuestion::factory()->create();
+        $question = NicenoBotQuestion::factory()->create();
 
         $this->actingAs($this->admin())
             ->put(route('admin.nicenito.preguntas.follow-up', $question), [

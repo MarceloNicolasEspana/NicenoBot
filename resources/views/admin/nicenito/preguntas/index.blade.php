@@ -1,6 +1,6 @@
 @extends('admin.layout')
 
-@section('title', 'Preguntas · Nicenito')
+@section('title', 'Preguntas · NicenoBot')
 
 @section('content')
     <h1 class="text-2xl font-bold text-slate-900">Preguntas</h1>

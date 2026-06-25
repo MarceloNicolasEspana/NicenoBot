@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\NicenitoQuestion;
+use App\Models\NicenoBotQuestion;
 use App\Models\Participant;
 use App\Services\CatequesisChatService;
 use Illuminate\Http\JsonResponse;
@@ -103,7 +103,7 @@ class CatequesisChatController extends Controller
      */
     private function storeQuestion(Participant $participant, string $message, array $result, array $meta): void
     {
-        NicenitoQuestion::create([
+        NicenoBotQuestion::create([
             'participant_id' => $participant->id,
             'weekly_content_id' => $meta['weekly_content_id'],
             'question' => $message,

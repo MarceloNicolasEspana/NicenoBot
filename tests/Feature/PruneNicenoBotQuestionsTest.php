@@ -2,11 +2,11 @@
 
 namespace Tests\Feature;
 
-use App\Models\NicenitoQuestion;
+use App\Models\NicenoBotQuestion;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class PruneNicenitoQuestionsTest extends TestCase
+class PruneNicenoBotQuestionsTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -14,16 +14,16 @@ class PruneNicenitoQuestionsTest extends TestCase
     {
         config(['nicenito.question_retention_days' => 90]);
 
-        $old = NicenitoQuestion::factory()->create([
+        $old = NicenoBotQuestion::factory()->create([
             'question' => 'Pregunta antigua sensible',
             'answer' => 'Respuesta antigua',
             'detected_category' => 'Oración',
             'used_gemini' => true,
         ]);
         // Envejecemos el registro sin tocar los timestamps automáticamente.
-        NicenitoQuestion::query()->whereKey($old->id)->update(['created_at' => now()->subDays(200)]);
+        NicenoBotQuestion::query()->whereKey($old->id)->update(['created_at' => now()->subDays(200)]);
 
-        $recent = NicenitoQuestion::factory()->create([
+        $recent = NicenoBotQuestion::factory()->create([
             'question' => 'Pregunta reciente',
             'answer' => 'Respuesta reciente',
         ]);

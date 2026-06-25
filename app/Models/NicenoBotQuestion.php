@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Enums\FollowUpStatus;
-use Database\Factories\NicenitoQuestionFactory;
+use Database\Factories\NicenoBotQuestionFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -22,10 +22,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property bool $needs_human_guidance
  * @property FollowUpStatus $follow_up_status
  */
-class NicenitoQuestion extends Model
+class NicenoBotQuestion extends Model
 {
-    /** @use HasFactory<NicenitoQuestionFactory> */
+    /** @use HasFactory<NicenoBotQuestionFactory> */
     use HasFactory;
+
+    protected $table = 'nicenito_questions';
 
     protected $fillable = [
         'participant_id',
@@ -64,7 +66,7 @@ class NicenitoQuestion extends Model
 
     public function weeklyContent(): BelongsTo
     {
-        return $this->belongsTo(NicenitoContent::class, 'weekly_content_id');
+        return $this->belongsTo(NicenoBotContent::class, 'weekly_content_id');
     }
 
     public function followUpBy(): BelongsTo

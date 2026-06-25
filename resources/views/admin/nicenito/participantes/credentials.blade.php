@@ -7,7 +7,7 @@
         <h1 class="text-2xl font-bold text-slate-900">Credenciales de acceso</h1>
         <div class="flex gap-2 print:hidden">
             <button onclick="window.print()" class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Imprimir</button>
-            <a href="{{ route('admin.nicenito.participantes.index') }}" class="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-700">Listo</a>
+            <a href="{{ route('admin.nicenito.participantes.index') }}" class="btn-primary">Listo</a>
         </div>
     </div>
 

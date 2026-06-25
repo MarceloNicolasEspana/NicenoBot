@@ -2,14 +2,14 @@
 
 namespace Tests\Feature;
 
-use App\Enums\NicenitoContentStatus;
-use App\Models\NicenitoContent;
+use App\Enums\NicenoBotContentStatus;
+use App\Models\NicenoBotContent;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
-class NicenitoAdminTest extends TestCase
+class NicenoBotAdminTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -63,10 +63,10 @@ class NicenitoAdminTest extends TestCase
 
     public function test_overlapping_published_weeks_are_rejected(): void
     {
-        NicenitoContent::factory()->weekly()->create([
-            'starts_at' => NicenitoContent::now()->startOfDay(),
-            'ends_at' => NicenitoContent::now()->addDays(7)->endOfDay(),
-            'status' => NicenitoContentStatus::Published,
+        NicenoBotContent::factory()->weekly()->create([
+            'starts_at' => NicenoBotContent::now()->startOfDay(),
+            'ends_at' => NicenoBotContent::now()->addDays(7)->endOfDay(),
+            'status' => NicenoBotContentStatus::Published,
         ]);
 
         $this->actingAs($this->admin())
@@ -77,8 +77,8 @@ class NicenitoAdminTest extends TestCase
                 'summary' => 'Resumen.',
                 'content' => 'Contenido.',
                 'gospel_reference' => 'Lucas 1, 1-4',
-                'starts_at' => NicenitoContent::now()->addDays(2)->format('Y-m-d H:i'),
-                'ends_at' => NicenitoContent::now()->addDays(9)->format('Y-m-d H:i'),
+                'starts_at' => NicenoBotContent::now()->addDays(2)->format('Y-m-d H:i'),
+                'ends_at' => NicenoBotContent::now()->addDays(9)->format('Y-m-d H:i'),
             ])
             ->assertSessionHasErrors('starts_at');
 

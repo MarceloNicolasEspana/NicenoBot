@@ -1,6 +1,6 @@
 @extends('participant.layout')
 
-@section('title', 'Ingresar · Nicenito')
+@section('title', 'Ingresar · NicenoBot')
 @section('heading', 'Ingresa para conversar')
 
 @section('content')

@@ -1,14 +1,13 @@
 @extends('admin.layout')
 
-@section('title', 'Participantes · Nicenito')
+@section('title', 'Participantes · NicenoBot')
 
 @section('content')
     <div class="flex flex-wrap items-center justify-between gap-3">
         <h1 class="text-2xl font-bold text-slate-900">Participantes</h1>
-        <a href="{{ route('admin.nicenito.participantes.create') }}"
-            class="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-700">
+        <button type="button" class="btn-primary" data-modal-url="{{ route('admin.nicenito.participantes.create') }}">
             Crear participante
-        </a>
+        </button>
     </div>
 
     <form method="GET" class="mt-6 flex flex-wrap gap-3 rounded-xl border border-slate-200 bg-white p-4">
@@ -59,7 +58,7 @@
                         </td>
                         <td class="px-4 py-3">
                             <div class="flex flex-wrap items-center justify-end gap-2">
-                                <a href="{{ route('admin.nicenito.participantes.edit', $participant) }}" class="text-slate-600 hover:underline">Editar</a>
+                                <button type="button" class="text-slate-600 hover:underline" data-modal-url="{{ route('admin.nicenito.participantes.edit', $participant) }}">Editar</button>
                                 <form method="POST" action="{{ route('admin.nicenito.participantes.toggle', $participant) }}">
                                     @csrf
                                     <button class="text-slate-600 hover:underline">{{ $participant->is_active ? 'Desactivar' : 'Activar' }}</button>
