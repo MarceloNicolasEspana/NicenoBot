@@ -14,11 +14,8 @@
             @vite(['resources/css/app.css', 'resources/js/app.js'])
         @endif
     </head>
-    <body class="min-h-screen bg-[var(--niceno-bg-2)] text-[var(--niceno-ink)]">
+    <body class="min-h-screen bg-[var(--lp-bg)] text-[var(--niceno-ink)]">
         <main class="relative min-h-screen overflow-hidden">
-            <div class="page-background-image" aria-hidden="true"></div>
-            <div class="page-background-veil" aria-hidden="true"></div>
-
             <div class="relative z-10 mx-auto flex min-h-screen max-w-[1320px] items-center px-4 py-5 sm:px-6 lg:px-8">
                 <section
                     id="catequesis-chat"
@@ -28,14 +25,10 @@
                 >
                     <aside class="niceno-stage flex min-h-[34rem] flex-col justify-between p-5 sm:p-7 lg:min-h-[44rem] lg:p-8">
                         <div class="space-y-5">
-                            <span class="inline-flex w-fit items-center rounded-full border border-[color:var(--niceno-gold-soft)] bg-[color:var(--niceno-cream)]/86 px-4 py-2 text-sm font-semibold text-[var(--niceno-burgundy)]">
-                                NicenoBot
-                            </span>
-
+                            <h1 class="text-3xl font-bold text-[var(--niceno-ink)] sm:text-4xl">
+                                Preg&uacute;ntale a NicenoBot
+                            </h1>
                             <div class="space-y-3">
-                                <h1 class="font-display text-4xl font-bold leading-tight text-[var(--niceno-ink)] sm:text-5xl">
-                                    Preg&uacute;ntale a NicenoBot
-                                </h1>
                                 <p class="max-w-md text-base leading-7 text-[var(--niceno-muted)]">
                                     Haz una pregunta sobre el Evangelio, la fe, la oraci&oacute;n o los sacramentos.
                                 </p>

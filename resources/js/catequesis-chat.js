@@ -117,6 +117,16 @@ const initializeCatequesisChat = () => {
     let avatarTransitionTimer;
     let responseStateTimer;
 
+    // Las imágenes de estado pesan varios cientos de KB. Si no se precargan, la
+    // primera transición (p. ej. a "pensando") no alcanza a verse porque la
+    // imagen aún se está descargando cuando el estado vuelve a cambiar.
+    const preloadAvatarImages = () => {
+        Object.values(nicenitoImages).forEach((src) => {
+            const image = new Image();
+            image.src = src;
+        });
+    };
+
     const clearAvatarTimers = () => {
         window.clearTimeout(idleTimer);
         window.clearTimeout(avatarTransitionTimer);
@@ -262,7 +272,8 @@ const initializeCatequesisChat = () => {
         appendMessage({ role: 'user', content: trimmedMessage });
         textarea.value = '';
         syncCounter();
-        setNicenoBotState('explicando');
+        // Mientras genera la respuesta, NicenoBot está "pensando".
+        setNicenoBotState('pensando');
         setLoading(true);
 
         try {
@@ -360,6 +371,7 @@ const initializeCatequesisChat = () => {
         });
     });
 
+    preloadAvatarImages();
     renderHistory();
     syncCounter();
     setNicenoBotState('base');

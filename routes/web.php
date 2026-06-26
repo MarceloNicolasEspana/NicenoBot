@@ -12,7 +12,15 @@ use App\Http\Controllers\Participant\OnboardingController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    // La portada no debe depender de la BD; si algo falla, omitimos el anuncio.
+    $weekly = null;
+    try {
+        $weekly = \App\Models\NicenitoContent::query()->activeWeekly()->first();
+    } catch (\Throwable $e) {
+        // Sin anuncio del Evangelio de la semana.
+    }
+
+    return view('welcome', ['weekly' => $weekly]);
 });
 
 // --- Acceso de participantes (jóvenes) ----------------------------------------

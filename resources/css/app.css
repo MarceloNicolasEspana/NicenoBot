@@ -24,15 +24,16 @@
         --niceno-burgundy-dark: #4f151b;
         --niceno-shadow: 0 24px 80px rgba(17, 24, 39, 0.22);
 
-        /* Fondo plano cálido (degradado crema) y motivo de arcos */
-        --niceno-bg-1: #f4eee0;
-        --niceno-bg-2: #efe7d6;
-        --niceno-bg-3: #e7dcc6;
+        /* Fondo burdeos litúrgico profundo (hace resaltar a NicenoBot y el oro)
+           con un degradado sutil, más el motivo de arcos. */
+        --niceno-bg-1: #5b1a22;
+        --niceno-bg-2: #4d141b;
+        --niceno-bg-3: #3f1016;
         --niceno-arch: #7c1e2e;
 
-        /* Texto sobre el fondo crema (cálido, alto contraste) */
-        --niceno-ink-warm: #241c16;
-        --niceno-muted-warm: #5a5048;
+        /* Texto claro sobre el fondo café (alto contraste) */
+        --niceno-ink-warm: #f7ecd9;
+        --niceno-muted-warm: #e4d2bd;
 
         /* ---- Panel administrativo (backoffice) ---- */
         --admin-bg: #f5f1e8; /* fondo de página neutro claro */
@@ -47,6 +48,18 @@
         --admin-card: #ffffff; /* tarjetas blancas normales */
         --admin-card-border: rgba(99, 56, 6, 0.12); /* borde sutil */
         --admin-ring: rgba(186, 117, 23, 0.35); /* anillo de foco */
+
+        /* ---- Landing page (reutiliza la paleta cálida del backoffice) ---- */
+        --lp-bg: #fbf6ec; /* fondo de página claro y cálido */
+        --lp-surface: var(--admin-surface); /* crema #faeeda */
+        --lp-card: #ffffff;
+        --lp-card-border: var(--admin-card-border);
+        --lp-border: var(--admin-border); /* dorado #ef9f27 */
+        --lp-accent: var(--admin-accent); /* #fac775 */
+        --lp-primary: var(--admin-primary); /* #ba7517 */
+        --lp-text: var(--admin-text); /* #633806 */
+        --lp-text-soft: var(--admin-text-soft); /* #854f0b */
+        --lp-green: var(--admin-active-green); /* #0f6e56 */
     }
 
     .font-display {
@@ -492,11 +505,12 @@
         align-items: center;
         gap: 0.6rem;
         padding: 1.25rem 1.1rem;
-        border-bottom: 2px solid var(--admin-border);
+        border-bottom: 1px solid rgba(60, 33, 4, 0.45);
+        background: linear-gradient(135deg, #c9821c 0%, #8a4f0c 55%, #5b3205 100%);
         font-size: 1.05rem;
         font-weight: 700;
         line-height: 1.2;
-        color: var(--admin-text);
+        color: #fff7e9;
     }
 
     .admin-brand-avatar {
@@ -575,8 +589,22 @@
     }
 
     .admin-user {
-        border-top: 2px solid var(--admin-border);
+        border-top: 1px solid rgba(60, 33, 4, 0.45);
+        background: linear-gradient(135deg, #5b3205 0%, #8a4f0c 100%);
         padding: 1rem;
+    }
+
+    .admin-user .btn-secondary {
+        border-color: rgba(255, 247, 233, 0.45);
+        color: #fff7e9;
+    }
+
+    .admin-user .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.14);
+    }
+
+    .admin-user .admin-avatar {
+        box-shadow: 0 0 0 2px rgba(255, 247, 233, 0.35);
     }
 
     /* Avatar de iniciales */
@@ -598,6 +626,39 @@
     .admin-main {
         margin-left: 17rem;
         min-height: 100vh;
+        transition: margin-left 220ms ease;
+    }
+
+    /* ---- Botón flotante para colapsar/mostrar el sidebar (escritorio) ---- */
+    .admin-sidebar-toggle {
+        position: fixed;
+        top: 1.1rem;
+        left: calc(17rem - 0.95rem);
+        z-index: 45;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        width: 1.9rem;
+        height: 1.9rem;
+        border-radius: 9999px;
+        border: 1px solid rgba(255, 247, 233, 0.5);
+        background: var(--admin-primary);
+        color: #fff7e9;
+        box-shadow: 0 4px 12px rgba(99, 56, 6, 0.3);
+        transition: left 220ms ease, background-color 150ms ease;
+    }
+
+    .admin-sidebar-toggle:hover {
+        background: var(--admin-primary-hover);
+    }
+
+    .admin-sidebar-toggle:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px var(--admin-ring);
+    }
+
+    .admin-sidebar-toggle svg {
+        transition: transform 220ms ease;
     }
 
     /* ---- Botones ---- */
@@ -640,6 +701,87 @@
     .btn-secondary:focus-visible {
         outline: none;
         box-shadow: 0 0 0 3px var(--admin-ring);
+    }
+
+    /* ---- Botones de acción con ícono ---- */
+    .action-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.1rem;
+        height: 2.1rem;
+        border-radius: 0.5rem;
+        border: 1px solid transparent;
+        transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease, transform 150ms ease;
+    }
+
+    .action-icon:hover {
+        transform: translateY(-1px);
+    }
+
+    .action-icon:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px var(--admin-ring);
+    }
+
+    .action-icon--view {
+        background: #eff6ff;
+        border-color: #bfdbfe;
+        color: #2563eb;
+    }
+
+    .action-icon--view:hover {
+        background: #dbeafe;
+    }
+
+    .action-icon--edit {
+        background: #fffbeb;
+        border-color: #fde68a;
+        color: #b45309;
+    }
+
+    .action-icon--edit:hover {
+        background: #fef3c7;
+    }
+
+    .action-icon--publish {
+        background: #ecfdf5;
+        border-color: #a7f3d0;
+        color: #047857;
+    }
+
+    .action-icon--publish:hover {
+        background: #d1fae5;
+    }
+
+    .action-icon--archive {
+        background: #f8fafc;
+        border-color: #e2e8f0;
+        color: #475569;
+    }
+
+    .action-icon--archive:hover {
+        background: #f1f5f9;
+    }
+
+    .action-icon--duplicate {
+        background: #eef2ff;
+        border-color: #c7d2fe;
+        color: #4f46e5;
+    }
+
+    .action-icon--duplicate:hover {
+        background: #e0e7ff;
+    }
+
+    .action-icon--delete {
+        background: #fef2f2;
+        border-color: #fecaca;
+        color: #dc2626;
+    }
+
+    .action-icon--delete:hover {
+        background: #fee2e2;
     }
 
     /* ---- Tarjetas ---- */
@@ -708,6 +850,29 @@
     }
 }
 
+/* Escritorio: botón visible y colapsado con efecto slide */
+@media (min-width: 1024px) {
+    .admin-sidebar-toggle {
+        display: inline-flex;
+    }
+
+    .admin-shell.sidebar-collapsed .admin-sidebar {
+        transform: translateX(-100%);
+    }
+
+    .admin-shell.sidebar-collapsed .admin-main {
+        margin-left: 0;
+    }
+
+    .admin-shell.sidebar-collapsed .admin-sidebar-toggle {
+        left: 0.75rem;
+    }
+
+    .admin-shell.sidebar-collapsed .admin-sidebar-toggle svg {
+        transform: rotate(180deg);
+    }
+}
+
 /* Responsive: sidebar como drawer en pantallas angostas */
 @media (max-width: 1023px) {
     .admin-main {
@@ -722,5 +887,186 @@
     .admin-sidebar.is-open {
         transform: translateX(0);
         box-shadow: 0 0 0 100vmax rgba(36, 28, 22, 0.45);
+    }
+}
+
+/* =====================================================================
+   Landing page pública
+   ===================================================================== */
+@layer components {
+    .lp-header {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        background: rgba(251, 246, 236, 0.85);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--lp-card-border);
+    }
+
+    .lp-nav-link {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--lp-text-soft);
+        transition: color 150ms ease;
+    }
+
+    .lp-nav-link:hover {
+        color: var(--lp-text);
+    }
+
+    .lp-card {
+        border-radius: 1.25rem;
+        border: 1px solid var(--lp-card-border);
+        background: var(--lp-card);
+    }
+
+    .lp-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        border-radius: 9999px;
+        border: 1px solid var(--lp-border);
+        background: var(--lp-surface);
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--lp-text);
+        white-space: nowrap;
+    }
+
+    .lp-eyebrow {
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--lp-primary);
+    }
+
+    /* Marquee horizontal */
+    .lp-marquee {
+        overflow: hidden;
+        -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+        mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+    }
+
+    .lp-marquee-track {
+        display: flex;
+        width: max-content;
+        gap: 0.75rem;
+        animation: lp-marquee 34s linear infinite;
+    }
+
+    .lp-marquee--rev .lp-marquee-track {
+        animation-direction: reverse;
+        animation-duration: 48s;
+    }
+
+    .lp-marquee:hover .lp-marquee-track {
+        animation-play-state: paused;
+    }
+
+    /* Pestañas de capacidades */
+    .lp-tab {
+        border-radius: 0.85rem;
+        border: 1px solid transparent;
+        padding: 0.85rem 1rem;
+        text-align: left;
+        font-weight: 600;
+        color: var(--lp-text-soft);
+        transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
+    }
+
+    .lp-tab:hover {
+        background: rgba(250, 199, 117, 0.25);
+        color: var(--lp-text);
+    }
+
+    .lp-tab.is-active {
+        background: var(--lp-surface);
+        border-color: var(--lp-border);
+        color: var(--lp-text);
+    }
+
+    .lp-tab-panel {
+        display: none;
+    }
+
+    .lp-tab-panel.is-active {
+        display: block;
+    }
+
+    /* FAQ acordeón (details/summary nativo) */
+    details.lp-faq {
+        border-bottom: 1px solid var(--lp-card-border);
+    }
+
+    details.lp-faq > summary {
+        cursor: pointer;
+        list-style: none;
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 1.1rem 0;
+        font-weight: 600;
+        color: var(--lp-text);
+    }
+
+    details.lp-faq > summary::-webkit-details-marker {
+        display: none;
+    }
+
+    details.lp-faq > summary::after {
+        content: '+';
+        color: var(--lp-primary);
+        font-weight: 700;
+        font-size: 1.25rem;
+        line-height: 1;
+    }
+
+    details.lp-faq[open] > summary::after {
+        content: '\2013';
+    }
+
+    details.lp-faq > div {
+        padding-bottom: 1.1rem;
+        color: var(--lp-text-soft);
+        line-height: 1.7;
+    }
+
+    /* Animación al hacer scroll */
+    .js .reveal {
+        opacity: 0;
+        transform: translateY(14px);
+        transition: opacity 600ms ease, transform 600ms ease;
+    }
+
+    .js .reveal.is-visible {
+        opacity: 1;
+        transform: none;
+    }
+
+    .lp-nav-link:focus-visible,
+    .lp-tab:focus-visible,
+    details.lp-faq > summary:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px var(--admin-ring);
+        border-radius: 0.4rem;
+    }
+}
+
+@keyframes lp-marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .lp-marquee-track {
+        animation: none !important;
+    }
+
+    .js .reveal {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
     }
 }

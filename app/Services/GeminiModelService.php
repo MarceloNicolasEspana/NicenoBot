@@ -78,8 +78,17 @@ PROMPT;
                 'systemInstruction' => ['parts' => [['text' => self::SYSTEM_PROMPT]]],
                 'contents' => $contents,
                 'generationConfig' => [
-                    'maxOutputTokens' => 400,
+                    // gemini-2.5-flash es un modelo "thinking": su razonamiento
+                    // interno también consume maxOutputTokens. El thinking aporta
+                    // precisión (analiza la pregunta y el contexto antes de
+                    // responder), así que lo mantenemos pero acotado. El tope de
+                    // tokens es generoso para que, tras razonar, quede espacio de
+                    // sobra para la respuesta visible y no se corte a media frase.
+                    'maxOutputTokens' => 2048,
                     'temperature' => 0.6,
+                    'thinkingConfig' => [
+                        'thinkingBudget' => 512,
+                    ],
                 ],
             ]
         );

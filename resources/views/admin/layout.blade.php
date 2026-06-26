@@ -28,6 +28,11 @@
     ];
 @endphp
 <body class="admin-shell h-full">
+    {{-- Estado inicial del sidebar colapsado (antes de pintar, evita parpadeo) --}}
+    <script>
+        try { if (localStorage.getItem('adminSidebarCollapsed') === '1') document.body.classList.add('sidebar-collapsed'); } catch (e) {}
+    </script>
+
     {{-- Overlay del drawer (solo móvil) --}}
     <div data-sidebar-close class="fixed inset-0 z-30 hidden bg-black/40 lg:hidden" id="admin-sidebar-overlay"></div>
 
@@ -56,8 +61,8 @@
             <div class="flex items-center gap-3">
                 <span class="admin-avatar" aria-hidden="true">{{ $initials }}</span>
                 <div class="min-w-0">
-                    <p class="truncate text-sm font-semibold" style="color: var(--admin-text);">{{ $user?->name }}</p>
-                    <p class="truncate text-xs" style="color: var(--admin-text-soft);">{{ $user?->email }}</p>
+                    <p class="truncate text-sm font-semibold" style="color: #fff7e9;">{{ $user?->name }}</p>
+                    <p class="truncate text-xs" style="color: rgba(255, 247, 233, 0.72);">{{ $user?->email }}</p>
                 </div>
             </div>
             <div class="mt-3 flex items-center gap-2">
@@ -69,6 +74,15 @@
             </div>
         </footer>
     </aside>
+
+    {{-- Botón de colapsar/mostrar el sidebar (escritorio), con efecto slide --}}
+    <button type="button" data-sidebar-collapse class="admin-sidebar-toggle"
+        aria-label="Ocultar o mostrar el panel" title="Ocultar o mostrar el panel">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" aria-hidden="true">
+            <path d="M15 18l-6-6 6-6"/>
+        </svg>
+    </button>
 
     {{-- Contenido principal --}}
     <div class="admin-main">
@@ -173,6 +187,13 @@
 
             // ---- Delegación de eventos ----
             document.addEventListener('click', (e) => {
+                const collapse = e.target.closest('[data-sidebar-collapse]');
+                if (collapse) {
+                    const collapsed = document.body.classList.toggle('sidebar-collapsed');
+                    try { localStorage.setItem('adminSidebarCollapsed', collapsed ? '1' : '0'); } catch (_) {}
+                    return;
+                }
+
                 const toggle = e.target.closest('[data-sidebar-toggle]');
                 if (toggle) { openSidebar(); return; }
                 if (e.target.closest('[data-sidebar-close]')) { closeSidebar(); return; }

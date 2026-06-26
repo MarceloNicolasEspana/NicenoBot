@@ -10,33 +10,29 @@
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     @endif
+    <style>body { font-family: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif; background: var(--lp-bg); color: var(--lp-text); }</style>
 </head>
-<body class="min-h-screen bg-[var(--niceno-bg-2)] text-[var(--niceno-ink)]" style="font-family: 'instrument-sans', ui-sans-serif, system-ui, sans-serif;">
-    <main class="relative min-h-screen overflow-hidden">
-        <div class="page-background-image" aria-hidden="true"></div>
-        <div class="page-background-veil" aria-hidden="true"></div>
-
-        <div class="relative z-10 flex min-h-screen items-center justify-center px-4 py-8">
-            <div class="w-full max-w-md rounded-3xl border border-[color:var(--niceno-gold-soft)] bg-white/92 p-7 shadow-2xl sm:p-9">
-                <div class="flex items-center gap-3">
-                    <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[color:var(--niceno-cream)] ring-1 ring-[color:var(--niceno-gold-soft)]">
-                        <img src="{{ asset('images/nicenito/clean/base.png') }}" alt="NicenoBot" class="h-12 w-12 object-contain object-top">
-                    </div>
-                    <div>
-                        <p class="text-xs font-semibold uppercase tracking-wide text-[var(--niceno-burgundy)]">NicenoBot</p>
-                        <h1 class="text-xl font-bold text-[var(--niceno-ink)]">@yield('heading')</h1>
-                    </div>
+<body class="min-h-screen">
+    <main class="flex min-h-screen items-center justify-center px-4 py-8">
+        <div class="lp-card w-full max-w-md p-7 shadow-xl sm:p-9">
+            <div class="flex items-center gap-3">
+                <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full" style="background: var(--lp-surface); border: 1px solid var(--lp-border);">
+                    <img src="{{ asset('images/nicenito/clean/base.png') }}" alt="NicenoBot" class="h-12 w-12 object-contain object-top">
                 </div>
-
-                @if ($errors->any())
-                    <div class="mt-5 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
-                        {{ $errors->first() }}
-                    </div>
-                @endif
-
-                <div class="mt-6">
-                    @yield('content')
+                <div>
+                    <p class="lp-eyebrow">NicenoBot</p>
+                    <h1 class="font-display text-xl font-bold" style="color: var(--lp-text);">@yield('heading')</h1>
                 </div>
+            </div>
+
+            @if ($errors->any())
+                <div class="mt-5 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
+                    {{ $errors->first() }}
+                </div>
+            @endif
+
+            <div class="mt-6">
+                @yield('content')
             </div>
         </div>
     </main>
