@@ -127,6 +127,49 @@ const initializeCatequesisChat = () => {
         });
     };
 
+    // Marca el contenedor como "conversando" para que el layout móvil pliegue la
+    // ilustración de bienvenida y deje a Nicenito como avatar pequeño en la
+    // cabecera. En escritorio la clase no tiene estilos asociados.
+    const setChattingState = () => {
+        root.classList.toggle('chatting', history.length > 0);
+    };
+
+    // Autocrecer del textarea hasta un máximo. Solo en móvil (≤560px) para no
+    // alterar el comportamiento de la vista de escritorio.
+    const autoGrowQuery = window.matchMedia('(max-width: 560px)');
+    const TEXTAREA_MAX_PX = 132;
+    const autoGrowTextarea = () => {
+        if (!autoGrowQuery.matches) {
+            textarea.style.height = '';
+            return;
+        }
+        textarea.style.height = 'auto';
+        textarea.style.height = `${Math.min(textarea.scrollHeight, TEXTAREA_MAX_PX)}px`;
+    };
+    autoGrowQuery.addEventListener('change', autoGrowTextarea);
+
+    // En teléfonos (≤560px) el hero de NicenoBot (imagen + estado) se reubica
+    // dentro del panel de chat, justo bajo la cabecera, para lograr el layout
+    // móvil de una sola columna. En escritorio vuelve a su escena lateral.
+    const mobileLayoutQuery = window.matchMedia('(max-width: 560px)');
+    const chatPanel = root.querySelector('.niceno-chat-panel');
+    const chatPanelHeader = chatPanel ? chatPanel.querySelector('header') : null;
+    const avatarHome = nicenitoAvatar.parentElement;
+    const applyMobileLayout = () => {
+        if (!chatPanel || !chatPanelHeader || !avatarHome) {
+            return;
+        }
+        if (mobileLayoutQuery.matches) {
+            if (nicenitoAvatar.parentElement !== chatPanel) {
+                chatPanelHeader.insertAdjacentElement('afterend', nicenitoAvatar);
+            }
+        } else if (nicenitoAvatar.parentElement !== avatarHome) {
+            avatarHome.appendChild(nicenitoAvatar);
+        }
+    };
+    applyMobileLayout();
+    mobileLayoutQuery.addEventListener('change', applyMobileLayout);
+
     const clearAvatarTimers = () => {
         window.clearTimeout(idleTimer);
         window.clearTimeout(avatarTransitionTimer);
@@ -209,6 +252,7 @@ const initializeCatequesisChat = () => {
 
     const renderHistory = () => {
         messagesContainer.innerHTML = '';
+        setChattingState();
 
         if (history.length === 0) {
             messagesContainer.innerHTML = `
@@ -241,6 +285,7 @@ const initializeCatequesisChat = () => {
 
     const appendMessage = (message) => {
         history.push(message);
+        setChattingState();
         messagesContainer.insertAdjacentHTML('beforeend', createMessageMarkup(message));
         scrollToBottom();
     };
@@ -272,6 +317,7 @@ const initializeCatequesisChat = () => {
         appendMessage({ role: 'user', content: trimmedMessage });
         textarea.value = '';
         syncCounter();
+        autoGrowTextarea();
         // Mientras genera la respuesta, NicenoBot está "pensando".
         setNicenoBotState('pensando');
         setLoading(true);
@@ -305,8 +351,11 @@ const initializeCatequesisChat = () => {
             history.pop();
             renderHistory();
 
-            // Sesi\u00f3n de participante expirada: volver al acceso.
-            if (error?.response?.status === 401) {
+            // Sesi\u00f3n expirada: 401 (sesi\u00f3n de participante) o 419 (CSRF/sesi\u00f3n
+            // vencida, que ocurre antes del 401). En ambos casos volvemos al
+            // acceso para reingresar, en vez de dejar al usuario atascado.
+            const status = error?.response?.status;
+            if (status === 401 || status === 419) {
                 const accessUrl = root.dataset.accessUrl;
                 if (accessUrl) {
                     window.location.href = accessUrl;
@@ -347,6 +396,7 @@ const initializeCatequesisChat = () => {
         window.clearTimeout(responseStateTimer);
         window.clearTimeout(idleTimer);
         syncCounter();
+        autoGrowTextarea();
 
         if (isSending) {
             return;
@@ -366,6 +416,7 @@ const initializeCatequesisChat = () => {
             window.clearTimeout(idleTimer);
             textarea.value = button.dataset.question ?? '';
             syncCounter();
+            autoGrowTextarea();
             setNicenoBotState('escuchando');
             await sendMessage(textarea.value);
         });

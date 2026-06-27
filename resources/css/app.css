@@ -464,6 +464,217 @@
     }
 }
 
+/* =====================================================================
+   Chat NicenoBot — ajustes SOLO para teléfonos (no afecta escritorio)
+   El hero de NicenoBot se reubica por JS dentro del panel de chat.
+   ===================================================================== */
+@media (max-width: 560px) {
+    /* Carcasa a pantalla completa, en columna */
+    .niceno-shell {
+        position: fixed;
+        inset: 0;
+        z-index: 20;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        max-width: none;
+        height: 100vh; /* respaldo para navegadores sin dvh */
+        height: 100dvh;
+        min-height: 0;
+        margin: 0;
+        border: 0;
+        border-radius: 0;
+        overflow: hidden;
+        backdrop-filter: none;
+    }
+
+    /* La escena lateral de escritorio (título + ilustración enmarcada) no se usa:
+       su contenido relevante se mueve al panel de chat. */
+    .niceno-stage {
+        display: none;
+    }
+
+    /* El panel de chat ES toda la interfaz móvil */
+    .niceno-chat-panel {
+        flex: 1 1 auto;
+        height: auto;
+        max-height: none;
+        min-height: 0;
+        border-left: 0;
+        border-top: 0;
+    }
+
+    /* Orden vertical de la columna */
+    .niceno-chat-panel > header {
+        order: 0;
+        padding-top: calc(0.75rem + env(safe-area-inset-top));
+    }
+    #nicenito-avatar { order: 1; }
+    #chat-messages { order: 2; }
+    #chat-loading { order: 3; }
+    #chat-error { order: 4; }
+    .chat-suggestions { order: 5; }
+    #chat-form { order: 6; }
+
+    /* Hero: NicenoBot de los hombros hacia arriba, sin marco y con fundido
+       inferior hacia transparente que deja ver el chat por debajo. */
+    #nicenito-avatar {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0;
+        padding: 0.35rem 1rem 0;
+        transition: max-height 320ms ease, opacity 240ms ease, padding 320ms ease;
+    }
+
+    #nicenito-avatar .nicenito-arch {
+        height: 9.5rem;
+        width: 100%;
+        max-width: 13rem;
+        border: 0;
+        border-radius: 0;
+        background: none;
+        box-shadow: none;
+        align-items: flex-start;
+        overflow: hidden;
+        transition: height 280ms ease, max-width 280ms ease;
+        -webkit-mask-image: linear-gradient(to bottom, #000 56%, transparent 100%);
+        mask-image: linear-gradient(to bottom, #000 56%, transparent 100%);
+    }
+
+    /* El halo dorado ya está dibujado en la imagen; ocultamos el de CSS */
+    #nicenito-avatar .nicenito-halo {
+        display: none;
+    }
+
+    #nicenito-avatar .nicenito-stage-image {
+        width: 12rem;
+        height: auto;
+        max-width: none;
+        object-fit: contain;
+        object-position: top center;
+        filter: drop-shadow(0 12px 16px rgba(17, 24, 39, 0.12));
+    }
+
+    /* Barra de estado justo debajo, subida hacia el fundido */
+    #nicenito-avatar .nicenito-status {
+        margin: -0.6rem auto 0;
+        padding: 0.5rem 0.9rem;
+        font-size: 0.85rem;
+        border-radius: 9999px;
+    }
+
+    /* Al conversar, el hero se encoge a una cabeza pequeña pero SIGUE visible,
+       para que se aprecie el estado (pensando, respondiendo, etc.). */
+    .niceno-shell.chatting #nicenito-avatar {
+        padding-top: 0.4rem;
+        padding-bottom: 0.1rem;
+    }
+
+    .niceno-shell.chatting #nicenito-avatar .nicenito-arch {
+        height: 6.5rem;
+        max-width: 7.5rem;
+    }
+
+    .niceno-shell.chatting #nicenito-avatar .nicenito-status {
+        margin-top: 0.15rem;
+        padding: 0.3rem 0.75rem;
+        font-size: 0.78rem;
+    }
+
+    /* Conversación: única zona que crece, con scroll propio */
+    #chat-messages {
+        flex: 1 1 auto;
+        min-height: 0;
+        padding: 0.9rem;
+    }
+
+    /* Aviso oculto en móvil (consumía demasiado alto y tapaba el chat) */
+    .chat-disclaimer {
+        display: none;
+    }
+
+    /* Sugerencias fijas, en tira horizontal con slide (scroll-snap) */
+    .chat-suggestions {
+        border-bottom: 0;
+        border-top: 1px solid rgba(217, 203, 182, 0.6);
+        padding: 0.55rem 0.7rem;
+    }
+
+    .chat-suggestions > div {
+        flex-wrap: nowrap;
+        gap: 0.5rem;
+        overflow-x: auto;
+        scroll-snap-type: x proximity;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        padding-bottom: 0.1rem;
+    }
+
+    .chat-suggestions > div::-webkit-scrollbar {
+        display: none;
+    }
+
+    .chat-suggestions .niceno-chip {
+        flex: 0 0 auto;
+        scroll-snap-align: start;
+        white-space: nowrap;
+        padding: 0.5rem 0.85rem;
+        font-size: 0.82rem;
+    }
+
+    /* Caja de entrada: textarea + botón circular, respeta teclado y notch */
+    #chat-form {
+        padding: 0.6rem 0.8rem;
+        padding-bottom: calc(0.6rem + env(safe-area-inset-bottom));
+        border-top: 1px solid rgba(217, 203, 182, 0.7);
+    }
+
+    #chat-form > div {
+        flex-direction: row;
+        align-items: flex-end;
+        gap: 0.6rem;
+    }
+
+    #chat-form > div > div {
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 0.25rem;
+    }
+
+    #chat-message {
+        min-height: 2.9rem;
+        max-height: 8.25rem;
+        resize: none;
+    }
+
+    .chat-send {
+        width: 3rem;
+        height: 3rem;
+        min-width: 0;
+        min-height: 0;
+        padding: 0;
+        border-radius: 9999px;
+    }
+
+    .chat-send-text {
+        display: none;
+    }
+
+    .chat-send-icon {
+        display: block;
+    }
+}
+
+/* Sin animación de plegado si el usuario reduce el movimiento */
+@media (max-width: 560px) and (prefers-reduced-motion: reduce) {
+    #nicenito-avatar,
+    #nicenito-avatar .nicenito-arch {
+        transition: none;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .nicenito-halo,
     .nicenito-status-dots span,

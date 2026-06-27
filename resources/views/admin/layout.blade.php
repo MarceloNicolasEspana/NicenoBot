@@ -166,6 +166,12 @@
                             return;
                         }
                         if (res.status === 422) { renderErrors(errBox, (await res.json()).errors); return; }
+                        // Sesión expirada (401) o token vencido (419): recargar
+                        // hacia el login en vez de mostrar un error sin salida.
+                        if (res.status === 401 || res.status === 419) {
+                            window.location = '{{ route('login') }}';
+                            return;
+                        }
                         renderErrors(errBox, { e: ['Ocurrió un error al guardar. Intenta de nuevo.'] });
                     } catch (_) {
                         renderErrors(errBox, { e: ['No se pudo conectar. Revisa tu conexión.'] });

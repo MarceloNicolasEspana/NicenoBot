@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>Preg&uacute;ntale a NicenoBot</title>
@@ -84,7 +84,7 @@
                             </div>
                         </header>
 
-                        <div class="border-b border-[color:var(--niceno-border)]/70 px-5 py-4 sm:px-7">
+                        <div class="chat-suggestions border-b border-[color:var(--niceno-border)]/70 px-5 py-4 sm:px-7">
                             <div class="flex flex-wrap gap-2.5">
                                 <button type="button" class="suggested-question niceno-chip" data-question="Explicame el Evangelio del domingo">
                                     Expl&iacute;came el Evangelio del domingo
@@ -138,10 +138,14 @@
                                 <div class="flex items-end gap-3 sm:w-auto sm:flex-col sm:gap-2">
                                     <button
                                         type="submit"
-                                        class="inline-flex min-h-12 min-w-32 items-center justify-center rounded-2xl bg-[var(--niceno-burgundy)] px-5 py-3 text-sm font-bold text-white shadow-[0_12px_24px_rgba(91,26,31,0.24)] transition hover:bg-[var(--niceno-burgundy-dark)] focus:outline-none focus:ring-4 focus:ring-[color:var(--niceno-gold-soft)] active:translate-y-px disabled:cursor-not-allowed disabled:bg-slate-400"
+                                        class="chat-send inline-flex min-h-12 min-w-32 items-center justify-center rounded-2xl bg-[var(--niceno-burgundy)] px-5 py-3 text-sm font-bold text-white shadow-[0_12px_24px_rgba(91,26,31,0.24)] transition hover:bg-[var(--niceno-burgundy-dark)] focus:outline-none focus:ring-4 focus:ring-[color:var(--niceno-gold-soft)] active:translate-y-px disabled:cursor-not-allowed disabled:bg-slate-400"
                                         aria-label="Enviar pregunta"
                                     >
-                                        Enviar
+                                        <span class="chat-send-text">Enviar</span>
+                                        <svg class="chat-send-icon hidden h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                            <path d="M22 2 11 13"/>
+                                            <path d="M22 2 15 22l-4-9-9-4 20-7Z"/>
+                                        </svg>
                                     </button>
                                     <p class="text-right text-xs text-[var(--niceno-muted)]">
                                         <span id="chat-counter">0</span>/500
@@ -150,7 +154,7 @@
                             </div>
                         </form>
 
-                        <div class="bg-[var(--niceno-ink)] px-5 py-4 text-sm leading-6 text-white/92 sm:px-7">
+                        <div class="chat-disclaimer bg-[var(--niceno-ink)] px-5 py-4 text-sm leading-6 text-white/92 sm:px-7">
                             Este chatbot es una ayuda para aprender y reflexionar. No reemplaza la conversaci&oacute;n con tu catequista, sacerdote o adulto responsable.
                         </div>
                     </section>

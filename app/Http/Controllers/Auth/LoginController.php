@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
-use Illuminate\View\View;
 
 /**
  * Login mínimo basado en el guard de sesión que trae Laravel. No se instaló
@@ -15,9 +15,13 @@ use Illuminate\View\View;
  */
 class LoginController extends Controller
 {
-    public function show(): View
+    public function show(): Response
     {
-        return view('auth.login');
+        // Sin caché: el formulario siempre se sirve con un token CSRF vigente,
+        // evitando el 419 al enviarlo desde una página cacheada o el botón Atrás.
+        return response()
+            ->view('auth.login')
+            ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
     }
 
     public function login(Request $request): RedirectResponse
