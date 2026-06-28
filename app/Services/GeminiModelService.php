@@ -18,8 +18,9 @@ No reemplaces a un sacerdote, catequista, adulto responsable, médico o profesio
 Usa lenguaje sencillo, cercano y respetuoso.
 Responde normalmente entre 90 y 180 palabras.
 No repitas la pregunta.
+Responde siempre la última pregunta del joven; no respondas preguntas anteriores ya tratadas ni cambies de tema.
+Si el contexto contiene información relacionada con la pregunta, explícala aunque sea parcial. Solo di que no tienes información cuando el contexto no contenga nada relacionado con la pregunta, y en ese caso no inventes.
 Incluye una pregunta breve de reflexión solo cuando aporte valor.
-Si el contexto no alcanza, dilo claramente.
 No generes fuentes: las fuentes son entregadas por el backend.
 PROMPT;
 
@@ -37,17 +38,33 @@ PROMPT;
     }
 
     /**
-     * Construye el mensaje de usuario que se envía a Gemini (pregunta +
-     * contexto autorizado). Expuesto para que la vista previa del panel pueda
-     * mostrar exactamente qué se enviará, sin revelar la API key.
+     * Construye el mensaje de usuario que se envía a Gemini. La pregunta actual
+     * va primero y con instrucción imperativa para que el modelo la responda a
+     * ella (y no a una pregunta anterior del hilo). Expuesto para que la vista
+     * previa del panel pueda mostrar exactamente qué se enviará, sin revelar la
+     * API key.
+     *
+     * @param  array<int,string>  $priorQuestions  Preguntas previas del joven, solo como hilo.
      */
-    public function buildUserPrompt(string $question, string $contextText): string
+    public function buildUserPrompt(string $question, string $contextText, array $priorQuestions = []): string
     {
         $context = trim($contextText) !== ''
             ? $contextText
             : 'No hay contexto autorizado disponible para esta pregunta.';
 
-        return "Contexto autorizado (es tu única fuente):\n{$context}\n\nPregunta del joven: {$question}";
+        $sections = [
+            "Pregunta actual del joven (respóndela SOLO a ella; no respondas preguntas anteriores):\n{$question}",
+        ];
+
+        $prior = array_values(array_filter(array_map('trim', $priorQuestions), fn (string $q) => $q !== ''));
+        if ($prior !== []) {
+            $list = implode("\n", array_map(fn (string $q) => "- {$q}", $prior));
+            $sections[] = "Preguntas anteriores del joven (solo para entender el hilo; NO las respondas de nuevo):\n{$list}";
+        }
+
+        $sections[] = "Contexto autorizado (es tu única fuente):\n{$context}";
+
+        return implode("\n\n", $sections);
     }
 
     /**
@@ -56,21 +73,27 @@ PROMPT;
      */
     public function generate(string $question, string $contextText = '', array $history = []): array
     {
-        $contents = [];
-
+        // Solo conservamos las preguntas previas del joven (rol user) como hilo.
+        // NUNCA reenviamos respuestas anteriores del asistente: arrastrar una
+        // respuesta previa (sobre todo un "no tengo info") hacía que el modelo
+        // respondiera la pregunta anterior en vez de la actual.
+        $priorQuestions = [];
         foreach ($history as $turn) {
-            $role = ($turn['role'] ?? '') === 'assistant' ? 'model' : 'user';
+            if (($turn['role'] ?? '') !== 'user') {
+                continue;
+            }
             $text = trim((string) ($turn['content'] ?? ''));
-
             if ($text !== '') {
-                $contents[] = ['role' => $role, 'parts' => [['text' => $text]]];
+                $priorQuestions[] = $text;
             }
         }
 
-        $contents[] = [
+        // Un único turno de usuario: la pregunta actual va primero y el hilo
+        // previo queda embebido como contexto, no como turnos a "continuar".
+        $contents = [[
             'role' => 'user',
-            'parts' => [['text' => $this->buildUserPrompt($question, $contextText)]],
-        ];
+            'parts' => [['text' => $this->buildUserPrompt($question, $contextText, $priorQuestions)]],
+        ]];
 
         $response = Http::post(
             self::API_BASE."{$this->model}:generateContent?key={$this->apiKey}",
@@ -85,7 +108,9 @@ PROMPT;
                     // tokens es generoso para que, tras razonar, quede espacio de
                     // sobra para la respuesta visible y no se corte a media frase.
                     'maxOutputTokens' => 2048,
-                    'temperature' => 0.6,
+                    // Temperatura baja para máxima fidelidad al contexto y menos
+                    // deriva de tema.
+                    'temperature' => 0.35,
                     'thinkingConfig' => [
                         'thinkingBudget' => 512,
                     ],

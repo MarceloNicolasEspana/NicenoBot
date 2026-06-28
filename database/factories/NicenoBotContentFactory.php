@@ -33,6 +33,7 @@ class NicenoBotContentFactory extends Factory
             'key_ideas' => [$this->faker->sentence(), $this->faker->sentence()],
             'faq' => [],
             'reflection_questions' => [],
+            'quiz_questions' => [],
             'tags' => [],
             'starts_at' => null,
             'ends_at' => null,

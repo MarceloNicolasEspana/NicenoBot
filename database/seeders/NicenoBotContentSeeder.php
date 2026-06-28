@@ -86,6 +86,28 @@ class NicenoBotContentSeeder extends Seeder
                     ['question' => '¿Está mal sentir miedo?', 'answer' => 'No. El miedo es humano; Jesús nos invita a confiarlo a Dios y a no quedarnos paralizados por él.'],
                 ],
                 'reflection_questions' => ['¿Qué miedo te gustaría poner hoy en manos de Dios?'],
+                'quiz_questions' => [
+                    [
+                        'question' => 'En el pasaje, ¿qué actitud propone Jesús frente al miedo?',
+                        'options' => ['Confiar en el cuidado de Dios', 'Esconder lo que se cree', 'Resignarse y no actuar'],
+                        'correct' => 0,
+                    ],
+                    [
+                        'question' => 'Cuando dice que Dios cuida hasta de los pajarillos, Jesús quiere mostrar que…',
+                        'options' => ['Los animales valen más que las personas', 'Dios se ocupa de cada persona aún en lo pequeño', 'Solo debemos preocuparnos por la naturaleza'],
+                        'correct' => 1,
+                    ],
+                    [
+                        'question' => 'Según el texto, vivir la fe con valentía significa…',
+                        'options' => ['No sentir miedo nunca', 'Dar pasos confiando en Dios aunque haya temor', 'Evitar cualquier situación difícil'],
+                        'correct' => 1,
+                    ],
+                    [
+                        'question' => '"Reconocer a Jesús delante de los demás" se refiere a…',
+                        'options' => ['Presumir de ser mejor que otros', 'Vivir y expresar la propia fe sin esconderla', 'Hablar solo dentro de la iglesia'],
+                        'correct' => 1,
+                    ],
+                ],
                 'biblical_references' => ['Mateo 10, 26-33'],
                 'catechism_references' => [],
                 'tags' => ['miedo', 'confianza', 'valentia', 'temor'],

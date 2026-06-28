@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="640" viewBox="0 0 480 640" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f1e4ca"/>
+      <stop offset="0.5" stop-color="#e4d2ab"/>
+      <stop offset="1" stop-color="#caaf82"/>
+    </linearGradient>
+    <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#bb9c6c"/>
+      <stop offset="1" stop-color="#8a6940"/>
+    </linearGradient>
+    <linearGradient id="colH" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#a98c5d"/>
+      <stop offset="0.5" stop-color="#f3e8cf"/>
+      <stop offset="1" stop-color="#a98c5d"/>
+    </linearGradient>
+    <radialGradient id="light" cx="50%" cy="34%" r="60%">
+      <stop offset="0" stop-color="#fff8e6" stop-opacity="0.98"/>
+      <stop offset="0.4" stop-color="#f7e6b4" stop-opacity="0.65"/>
+      <stop offset="1" stop-color="#f7e6b4" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glass" cx="50%" cy="42%" r="62%">
+      <stop offset="0" stop-color="#fff4cf" stop-opacity="1"/>
+      <stop offset="0.55" stop-color="#f0d98f" stop-opacity="0.8"/>
+      <stop offset="1" stop-color="#caa657" stop-opacity="0.7"/>
+    </radialGradient>
+    <clipPath id="winClip">
+      <path d="M165 460 L165 250 A150 150 0 0 1 240 121 A150 150 0 0 1 315 250 L315 460 Z"/>
+    </clipPath>
+  </defs>
+
+  <!-- Muro de piedra cálida -->
+  <rect x="0" y="0" width="480" height="640" fill="url(#wall)"/>
+
+  <!-- Bóvedas / arcos del techo (nervaduras que convergen) -->
+  <g fill="none" stroke="#9a7e51" stroke-opacity="0.45" stroke-width="3">
+    <path d="M20 230 Q240 -30 460 230"/>
+    <path d="M55 230 Q240 25 425 230"/>
+    <path d="M95 230 Q240 70 385 230"/>
+  </g>
+
+  <!-- Haces de luz desde el ventanal -->
+  <polygon points="200,250 280,250 380,470 100,470" fill="#fff6da" fill-opacity="0.14"/>
+
+  <!-- Ventanas laterales con arco apuntado -->
+  <g opacity="0.85">
+    <path d="M96 360 L96 250 A40 40 0 0 1 116 215 A40 40 0 0 1 136 250 L136 360 Z" fill="url(#glass)" stroke="#6b5630" stroke-width="3"/>
+    <path d="M344 360 L344 250 A40 40 0 0 1 364 215 A40 40 0 0 1 384 250 L384 360 Z" fill="url(#glass)" stroke="#6b5630" stroke-width="3"/>
+  </g>
+
+  <!-- Columnas -->
+  <g>
+    <rect x="40" y="170" width="26" height="300" fill="url(#colH)"/>
+    <rect x="32" y="160" width="42" height="16" rx="3" fill="#d8c49a"/>
+    <rect x="34" y="466" width="38" height="14" rx="3" fill="#a98c5d"/>
+    <rect x="414" y="170" width="26" height="300" fill="url(#colH)"/>
+    <rect x="406" y="160" width="42" height="16" rx="3" fill="#d8c49a"/>
+    <rect x="408" y="466" width="38" height="14" rx="3" fill="#a98c5d"/>
+  </g>
+
+  <!-- Ventanal central de vitral -->
+  <path d="M165 460 L165 250 A150 150 0 0 1 240 121 A150 150 0 0 1 315 250 L315 460 Z" fill="url(#light)"/>
+  <g clip-path="url(#winClip)">
+    <rect x="160" y="115" width="160" height="350" fill="url(#glass)"/>
+    <circle cx="240" cy="200" r="42" fill="#d8a32a" fill-opacity="0.55"/>
+    <circle cx="206" cy="300" r="34" fill="#2f4d7a" fill-opacity="0.42"/>
+    <circle cx="274" cy="300" r="34" fill="#7c2230" fill-opacity="0.42"/>
+    <circle cx="240" cy="380" r="30" fill="#3d6b4a" fill-opacity="0.38"/>
+    <g stroke="#6b5630" stroke-opacity="0.55" stroke-width="4">
+      <line x1="205" y1="130" x2="205" y2="460"/>
+      <line x1="275" y1="130" x2="275" y2="460"/>
+      <line x1="165" y1="300" x2="315" y2="300"/>
+    </g>
+  </g>
+  <path d="M165 460 L165 250 A150 150 0 0 1 240 121 A150 150 0 0 1 315 250 L315 460 Z" fill="none" stroke="#6b5630" stroke-opacity="0.7" stroke-width="5"/>
+
+  <!-- Piso con perspectiva -->
+  <rect x="0" y="470" width="480" height="170" fill="url(#floor)"/>
+  <g stroke="#6f5230" stroke-opacity="0.3" stroke-width="2">
+    <line x1="0" y1="640" x2="240" y2="472"/>
+    <line x1="120" y1="640" x2="240" y2="472"/>
+    <line x1="360" y1="640" x2="240" y2="472"/>
+    <line x1="480" y1="640" x2="240" y2="472"/>
+    <line x1="0" y1="520" x2="480" y2="520"/>
+    <line x1="0" y1="580" x2="480" y2="580"/>
+  </g>
+</svg>

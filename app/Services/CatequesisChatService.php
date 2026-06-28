@@ -135,7 +135,9 @@ class CatequesisChatService
     }
 
     /**
-     * Reduce el historial a los últimos N mensajes útiles definidos en config.
+     * Reduce el historial a las últimas N preguntas del joven (rol user). Se
+     * descartan las respuestas del asistente: solo el hilo de preguntas aporta
+     * contexto sin arrastrar al modelo a responder un turno anterior.
      *
      * @param  array<int,array{role:string,content:string}>  $history
      * @return array<int,array{role:string,content:string}>
@@ -144,7 +146,12 @@ class CatequesisChatService
     {
         $max = (int) config('nicenito.context.history_messages', 2);
 
-        return array_slice(array_values($history), -$max);
+        $userTurns = array_values(array_filter(
+            $history,
+            fn ($turn) => ($turn['role'] ?? null) === 'user' && trim((string) ($turn['content'] ?? '')) !== '',
+        ));
+
+        return array_slice($userTurns, -$max);
     }
 
     /**

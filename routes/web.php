@@ -3,20 +3,22 @@
 use App\Http\Controllers\Admin\NicenoBotContentController;
 use App\Http\Controllers\Admin\NicenoBotDashboardController;
 use App\Http\Controllers\Admin\NicenoBotQuestionController;
+use App\Http\Controllers\Admin\NicenoBotQuizAttemptController;
 use App\Http\Controllers\Admin\ParticipantController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CatequesisChatController;
 use App\Http\Controllers\Participant\AccessController;
 use App\Http\Controllers\Participant\OnboardingController;
+use App\Models\NicenitoContent;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     // La portada no debe depender de la BD; si algo falla, omitimos el anuncio.
     $weekly = null;
     try {
-        $weekly = \App\Models\NicenitoContent::query()->activeWeekly()->first();
-    } catch (\Throwable $e) {
+        $weekly = NicenitoContent::query()->activeWeekly()->first();
+    } catch (Throwable $e) {
         // Sin anuncio del Evangelio de la semana.
     }
 
@@ -41,6 +43,7 @@ Route::middleware('participant.auth')->group(function () {
 Route::middleware(['participant.auth', 'participant.onboarded'])->group(function () {
     Route::get('/chatbot-catequesis', [CatequesisChatController::class, 'show'])->name('chatbot.show');
     Route::post('/chatbot-catequesis/preguntar', [CatequesisChatController::class, 'chat'])->name('chatbot.chat');
+    Route::post('/chatbot-catequesis/quiz', [CatequesisChatController::class, 'quiz'])->name('chatbot.quiz');
 });
 
 // --- Autenticación de administradores (login mínimo basado en sesión) ----------
@@ -84,6 +87,10 @@ Route::middleware('nicenito.admin')
         Route::get('/preguntas', [NicenoBotQuestionController::class, 'index'])->name('preguntas.index');
         Route::get('/preguntas/{pregunta}', [NicenoBotQuestionController::class, 'show'])->name('preguntas.show');
         Route::put('/preguntas/{pregunta}/seguimiento', [NicenoBotQuestionController::class, 'updateFollowUp'])->name('preguntas.follow-up');
+
+        // Intentos de quiz (revisión del catequista)
+        Route::get('/quiz', [NicenoBotQuizAttemptController::class, 'index'])->name('quiz.index');
+        Route::get('/quiz/{intento}', [NicenoBotQuizAttemptController::class, 'show'])->name('quiz.show');
 
         // Perfil del usuario de backoffice
         Route::get('/perfil', [ProfileController::class, 'edit'])->name('perfil.edit');

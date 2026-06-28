@@ -10,6 +10,11 @@
     $faqLines = collect($content->faq ?? [])
         ->map(fn ($row) => ($row['question'] ?? '').' :: '.($row['answer'] ?? ''))
         ->implode("\n");
+    $quizLines = collect($content->quiz_questions ?? [])
+        ->map(fn ($row) => ($row['question'] ?? '')
+            .' :: '.collect($row['options'] ?? [])->implode(' | ')
+            .' :: '.($row['correct'] ?? 0))
+        ->implode("\n");
     $dt = fn ($value) => $value?->format('Y-m-d\TH:i');
     $typeValue = $content->type?->value ?? NicenoBotContentType::Weekly->value;
 @endphp
@@ -107,6 +112,12 @@
                         <input type="datetime-local" name="ends_at" value="{{ $dt($content->ends_at) }}" class="admin-input mt-1">
                     </div>
                     <p class="text-xs" style="color: var(--admin-text-soft);">Zona horaria {{ config('nicenito.timezone') }}.</p>
+
+                    <div>
+                        <label class="admin-label">Quiz <span class="font-normal" style="color: var(--admin-text-soft);">(hasta 4; pregunta :: opción A | opción B | opción C :: índice correcto)</span></label>
+                        <textarea name="quiz_questions_text" rows="5" placeholder="¿Qué actitud propone Jesús frente al miedo en este pasaje? :: Confiar en Dios | Resignarse | Ignorar el problema :: 0" class="admin-input mt-1">{{ $quizLines }}</textarea>
+                        <p class="mt-1 text-xs" style="color: var(--admin-text-soft);">Una pregunta por línea. El índice empieza en 0 (0 = primera opción). Aparece cuando el joven alcanza el límite de preguntas.</p>
+                    </div>
                 </div>
 
                 @if ($isEdit)

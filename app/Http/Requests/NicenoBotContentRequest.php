@@ -39,6 +39,7 @@ class NicenoBotContentRequest extends FormRequest
             'reflection_questions' => $this->linesToArray($this->input('reflection_questions_text')),
             'tags' => $this->linesToArray($this->input('tags_text'), ',', "\n"),
             'faq' => $this->faqToArray($this->input('faq_text')),
+            'quiz_questions' => $this->quizToArray($this->input('quiz_questions_text')),
         ]);
 
         if (blank($this->input('slug')) && filled($this->input('title'))) {
@@ -97,12 +98,31 @@ class NicenoBotContentRequest extends FormRequest
             'faq' => ['array'],
             'faq.*.question' => ['required', 'string', 'max:280'],
             'faq.*.answer' => ['required', 'string', 'max:600'],
+
+            // Quiz: hasta 4 preguntas de opción múltiple (2 a 4 alternativas).
+            'quiz_questions' => ['array', 'max:4'],
+            'quiz_questions.*.question' => ['required', 'string', 'max:280'],
+            'quiz_questions.*.options' => ['required', 'array', 'min:2', 'max:4'],
+            'quiz_questions.*.options.*' => ['required', 'string', 'max:160'],
+            'quiz_questions.*.correct' => ['required', 'integer', 'min:0'],
         ];
     }
 
     public function withValidator($validator): void
     {
         $validator->after(function ($validator) {
+            // El índice de la alternativa correcta debe existir entre las opciones.
+            foreach ((array) $this->input('quiz_questions', []) as $i => $question) {
+                $options = $question['options'] ?? [];
+                $correct = $question['correct'] ?? null;
+                if (is_array($options) && is_int($correct) && $correct >= count($options)) {
+                    $validator->errors()->add(
+                        "quiz_questions.{$i}.correct",
+                        'La alternativa correcta no coincide con ninguna opción de la pregunta '.($i + 1).'.',
+                    );
+                }
+            }
+
             if (! $this->isPublishedWeekly()) {
                 return;
             }
@@ -186,6 +206,43 @@ class NicenoBotContentRequest extends FormRequest
                 ];
             })
             ->filter(fn (array $row) => $row['question'] !== '' && $row['answer'] !== '')
+            ->values()
+            ->all();
+    }
+
+    /**
+     * Cada línea con formato "pregunta :: opciónA | opciónB | opciónC :: índiceCorrecto".
+     * El índice es base 0 (0 = primera opción). Si se omite, se asume 0.
+     *
+     * @return array<int,array{question:string,options:array<int,string>,correct:int}>
+     */
+    private function quizToArray(?string $value): array
+    {
+        if (blank($value)) {
+            return [];
+        }
+
+        return collect(explode("\n", $value))
+            ->map(fn (string $line) => trim($line))
+            ->filter()
+            ->map(function (string $line) {
+                $parts = array_map('trim', explode('::', $line));
+
+                $options = collect(explode('|', $parts[1] ?? ''))
+                    ->map(fn (string $option) => trim($option))
+                    ->filter()
+                    ->values()
+                    ->all();
+
+                $correct = isset($parts[2]) && is_numeric($parts[2]) ? (int) $parts[2] : 0;
+
+                return [
+                    'question' => $parts[0] ?? '',
+                    'options' => $options,
+                    'correct' => $correct,
+                ];
+            })
+            ->filter(fn (array $row) => $row['question'] !== '' && count($row['options']) >= 2)
             ->values()
             ->all();
     }

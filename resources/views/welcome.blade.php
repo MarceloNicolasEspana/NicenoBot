@@ -228,7 +228,7 @@
             <div class="reveal flex flex-col items-center gap-5 rounded-3xl px-6 py-12 text-center" style="background: var(--lp-text);">
                 <img src="{{ asset('images/nicenito/clean/celebrando.png') }}" alt="" class="h-24 w-auto object-contain">
                 <h2 class="font-display text-3xl font-bold sm:text-4xl" style="color: #fdf3e2;">Comienza a conversar con NicenoBot</h2>
-                <p class="max-w-xl text-base" style="color: #f0dcc0;">Gratis, sin registro y a tu ritmo. Da el primer paso de tu conversación de fe.</p>
+                <p class="max-w-xl text-base" style="color: #f0dcc0;">Gratis, sin registro y a tu ritmo.</p>
                 <a href="{{ route('participant.access.show') }}" class="btn-primary text-base">Conversar con NicenoBot</a>
             </div>
         </section>

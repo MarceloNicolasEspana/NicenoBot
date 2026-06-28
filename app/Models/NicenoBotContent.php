@@ -28,6 +28,7 @@ use Illuminate\Support\Carbon;
  * @property array|null $key_ideas
  * @property array|null $faq
  * @property array|null $reflection_questions
+ * @property array|null $quiz_questions
  * @property array|null $tags
  * @property Carbon|null $starts_at
  * @property Carbon|null $ends_at
@@ -53,6 +54,7 @@ class NicenoBotContent extends Model
         'key_ideas',
         'faq',
         'reflection_questions',
+        'quiz_questions',
         'tags',
         'starts_at',
         'ends_at',
@@ -69,6 +71,7 @@ class NicenoBotContent extends Model
             'key_ideas' => 'array',
             'faq' => 'array',
             'reflection_questions' => 'array',
+            'quiz_questions' => 'array',
             'tags' => 'array',
             'starts_at' => 'datetime',
             'ends_at' => 'datetime',

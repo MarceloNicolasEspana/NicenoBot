@@ -30,6 +30,40 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Interfaz del chatbot (feature flag)
+    |--------------------------------------------------------------------------
+    |
+    | Controla qué interfaz se renderiza en /chatbot-catequesis:
+    |   - 'vue'    : nueva interfaz basada en componentes Vue (por defecto).
+    |   - 'legacy' : interfaz Blade + JavaScript anterior (fallback temporal).
+    |
+    | Ambas consumen el mismo endpoint y contrato. Permite volver atrás sin
+    | desplegar código si la interfaz nueva presenta algún problema.
+    |
+    */
+
+    'chat_ui' => env('NICENITO_CHAT_UI', 'vue') === 'legacy' ? 'legacy' : 'vue',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Preguntas sugeridas del chatbot
+    |--------------------------------------------------------------------------
+    |
+    | Se muestran como atajos al iniciar la conversación. NO llaman a Gemini:
+    | solo rellenan el campo de texto. Mantenerlas breves y catequéticas.
+    |
+    */
+
+    'suggested_questions' => [
+        'Explícame el Evangelio del domingo',
+        '¿Cómo puedo rezar mejor?',
+        '¿Qué es la confesión?',
+        '¿Qué significa tener fe?',
+        'Dame una pregunta para reflexionar',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Logging detallado (solo desarrollo)
     |--------------------------------------------------------------------------
     |
