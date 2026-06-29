@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>NicenoBot · Acompañamiento de catequesis</title>
-    <meta name="description" content="NicenoBot es un asistente que acompaña a niños, jóvenes y laicos en la fe católica: el Evangelio, la oración y los sacramentos. Conversa con él, gratis y sin registro.">
+    <title>NicenoBot · Apoyo de catequesis</title>
+    <meta name="description" content="NicenoBot es un asistente que apoya a jóvenes y laicos en la formación en la fe católica: el Evangelio, la oración y los sacramentos. Conversa con él, gratis y sin registro.">
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700|lora:600,700" rel="stylesheet" />
@@ -63,7 +63,7 @@
         <section class="mx-auto max-w-6xl px-4 pt-14 pb-10 sm:px-6">
             <div class="grid items-center gap-10 lg:grid-cols-2">
                 <div class="reveal">
-                    <p class="lp-eyebrow">Camino de fe, acompañado</p>
+                    <p class="lp-eyebrow">Estudio de fe</p>
                     <h1 class="mt-3 font-display text-4xl font-bold leading-tight sm:text-5xl" style="color: var(--lp-text);">
                         Conversa sobre tu fe con NicenoBot
                     </h1>
@@ -87,7 +87,7 @@
                             <img src="{{ asset('images/nicenito/clean/base.png') }}" alt="NicenoBot" class="h-10 w-10 rounded-full object-contain object-top" style="background: var(--lp-surface);">
                             <div>
                                 <p class="text-sm font-bold" style="color: var(--lp-text);">NicenoBot</p>
-                                <p class="text-xs" style="color: var(--lp-green);">● En línea para acompañarte</p>
+                                <p class="text-xs" style="color: var(--lp-green);">● En línea para ayudarte</p>
                             </div>
                         </div>
                         <div class="space-y-3 pt-4">
@@ -100,11 +100,11 @@
             </div>
         </section>
 
-        {{-- ===== 5. Así te acompaña Nicenito (pestañas) ===== --}}
+        {{-- ===== 5. Así te ayuda Nicenito (pestañas) ===== --}}
         <section id="como-funciona" class="mx-auto max-w-6xl scroll-mt-20 px-4 py-16 sm:px-6">
             <div class="reveal text-center">
                 <p class="lp-eyebrow">Capacidades</p>
-                <h2 class="mt-2 font-display text-3xl font-bold sm:text-4xl" style="color: var(--lp-text);">Así te acompaña NicenoBot</h2>
+                <h2 class="mt-2 font-display text-3xl font-bold sm:text-4xl" style="color: var(--lp-text);">Así te ayuda NicenoBot</h2>
             </div>
 
             @php
@@ -166,7 +166,7 @@
                          'link' => '#faq', 'linkText' => 'Ver cómo cuida la fidelidad'],
                         ['img' => 'celebrando', 'eyebrow' => 'Para catequistas y grupos',
                          'title' => 'Pensado para catequistas y grupos juveniles',
-                         'text' => 'Acompaña la preparación de encuentros, ayuda a los jóvenes a formular mejor sus preguntas y refuerza el tema de la semana. El equipo administra el contenido desde un panel propio.',
+                         'text' => 'Apoya la preparación de encuentros, ayuda a los jóvenes a formular mejor sus preguntas y refuerza el tema de la semana. El equipo administra el contenido desde un panel propio.',
                          'link' => route('login'), 'linkText' => 'Acceso para catequistas'],
                         ['img' => 'pensando', 'eyebrow' => 'Cercano',
                          'title' => 'NicenoBot escucha, explica y reflexiona contigo',
@@ -243,7 +243,7 @@
                         <img src="{{ asset('images/nicenito/clean/base.png') }}" alt="" class="h-9 w-9 object-contain object-top">
                         <span class="font-display text-xl font-bold" style="color: #fdf3e2;">Nicenito</span>
                     </div>
-                    <p class="mt-3 text-sm leading-6">Acompañamiento de catequesis para crecer en la fe.</p>
+                    <p class="mt-3 text-sm leading-6">Apoyo de catequesis para crecer en la fe.</p>
                 </div>
                 <div>
                     <p class="text-sm font-bold" style="color: #fdf3e2;">Secciones</p>

@@ -7,7 +7,7 @@ No necesitas correo, teléfono ni instalar nada: solo un **código** y un **PIN*
 
 ## 1. ¿Qué es NicenoBot?
 
-NicenoBot es un asistente que te acompaña en tu camino de fe. Puedes preguntarle sobre:
+NicenoBot es un asistente que te apoya en tu formación en la fe. Puedes preguntarle sobre:
 
 - el **Evangelio** del domingo,
 - la **oración** (cómo rezar, cuándo, etc.),

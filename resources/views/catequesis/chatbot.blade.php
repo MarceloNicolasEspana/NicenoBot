@@ -71,7 +71,7 @@
                                 </div>
 
                                 <div class="nicenito-status" aria-live="polite">
-                                    <p id="nicenito-avatar-label">NicenoBot est&aacute; listo para acompa&ntilde;arte.</p>
+                                    <p id="nicenito-avatar-label">NicenoBot est&aacute; listo para ayudarte.</p>
                                     <span class="nicenito-status-dots" aria-hidden="true">
                                         <span></span>
                                         <span></span>

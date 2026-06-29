@@ -28,7 +28,7 @@ const ALT_TEXT = {
 };
 
 const STATUS_TEXT = {
-    base: 'NicenoBot está listo para acompañarte.',
+    base: 'NicenoBot está listo para ayudarte.',
     escuchando: 'NicenoBot te escucha.',
     pensando: 'NicenoBot está pensando.',
     respondiendo: 'NicenoBot está respondiendo.',

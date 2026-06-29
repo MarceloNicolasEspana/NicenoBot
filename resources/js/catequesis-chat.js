@@ -17,7 +17,7 @@ const nicenitoAlt = {
     finalizando: 'NicenoBot esta finalizando la conversacion',
 };
 const nicenitoLabels = {
-    base: 'NicenoBot está listo para acompañarte.',
+    base: 'NicenoBot está listo para ayudarte.',
     escuchando: 'NicenoBot está escuchando.',
     pensando: 'NicenoBot está pensando.',
     respondiendo: 'NicenoBot está respondiendo.',
